@@ -2,6 +2,10 @@
 
 A classic snake game programmed in C and run on a ChipKit Basic I/O Shield.
 
+## Links
+
+- [Project instructions](https://www.kth.se/social/course/IS1200/page/mini-project/)
+
 ## Important Dates
 
 - [ ] Feb 5,  Submission draft extended abstract of project
