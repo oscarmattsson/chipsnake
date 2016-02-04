@@ -1,0 +1,2 @@
+game.S.o: game.S
+game.S :
