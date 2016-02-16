@@ -31,8 +31,12 @@ int main(void) {
 	TRISGCLR = 0x200;
 
 	/* Set up input pins */
-	TRISDSET = (1 << 8);
-	TRISFSET = (1 << 1);
+	TRISFSET = 0x2; // Button 1
+	TRISDSET = 0xE0; // Buttons 2-4
+  //TRISDSET = 0xF00; // Switches 1-4
+
+  /* Set up output pins */
+  TRISECLR = 0xFF;
 
 	/* Set up SPI as master */
 	SPI2CON = 0;
