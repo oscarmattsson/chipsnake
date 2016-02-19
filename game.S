@@ -27,29 +27,8 @@ ehexasc:
   jr    $ra
   nop
 
-# delay: Delay the program by $a0 milliseconds
-# Written 2016-01-23 by Oscar Mattsson
-.global delay
-delay:
-  slti	$t0,$a0,1		    # if the delay is 0 or less, jump to end
-  bnez	$t0,edelay
-  nop
-
-l1:								      # while($a0 > 0)
-  li	  $t0,0					  # reset loop count
-  li	  $t1,20000			  # set counts per ms
-
-  l2: 						      # for($t0 = 0; $t0 < $t1; $t0++)
-    addi	$t0,$t0,1	    # increase loop count
-    slt	  $t2,$t0,$t1	  # check if target count is reached
-    bnez	$t2,l2		    # if not, keep looping
-    nop
-
-  addi	$a0,$a0,-1	    # $a0--
-  slti	$t0,$a0,1		    # check if delay target is reached
-  beqz	$t0,l1			    # if not, keep looping
-  nop
-
-edelay:						      # end delay
-  jr    $ra
+.global enable_interrupt
+enable_interrupt:
+  ei
+  jr $ra
   nop

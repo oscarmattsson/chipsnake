@@ -24,6 +24,12 @@ static void num32asc( char * s, int );
 #define DISPLAY_TURN_OFF_VDD (PORTFSET = 0x40)
 #define DISPLAY_TURN_OFF_VBAT (PORTFSET = 0x20)
 
+#define I2C_EEPROM_READ 0xA1;
+#define I2C_EEPROM_WRITE 0xA0;
+
+#define I2C_TEMPERATURE_READ 0x91;
+#define I2C_TEMPERATURE_WRITE 0x90;
+
 /* quicksleep:
 		A simple function to create a small delay.
 		Very inefficient use of computing resources,
@@ -98,6 +104,38 @@ void display_init(void) {
 	spi_send_recv(0x20);
 
 	spi_send_recv(0xAF);
+}
+
+void i2c_start(void) {
+	I2C1CONSET = PIC32_I2CCON_SEN;
+}
+
+void i2c_restart(void) {
+	I2C1CONSET = PIC32_I2CCON_RSEN;
+}
+
+void i2c_stop(void) {
+	I2C1CONSET = PIC32_I2CCON_PEN;
+}
+
+void i2c_sendbyte(uint8_t data) {
+	I2C1TRN = data;
+}
+
+void eeprom_mode_write(void) {
+	I2C1TRN = I2C_EEPROM_WRITE;
+}
+
+void eeprom_mode_read(void) {
+	I2C1TRN = I2C_EEPROM_READ;
+}
+
+void temperature_mode_write(void) {
+	I2C1TRN = I2C_TEMPERATURE_WRITE;
+}
+
+void temperature_mode_read(void) {
+	I2C1TRN = I2C_TEMPERATURE_READ;
 }
 
 /* display_string
