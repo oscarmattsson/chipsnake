@@ -17,9 +17,20 @@ uint8_t spi_send_recv(uint8_t data);
 char * itoaconv(int num);
 void quicksleep(int cyc);
 
+/* Declare functions from intro.c */
+void intro_init(void);
+void intro_update(void);
+void intro_draw(void);
+
+/* Declare functions from menu.c */
+void menu_init(void);
+void menu_update(void);
+void menu_draw(void);
+
 /* Declare functions from game.c */
-void init(void);
-void run(void);
+void game_init(void);
+void game_update(void);
+void game_draw(void);
 
 /* Declare display_debug - a function to help debugging.
 

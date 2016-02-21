@@ -1,4 +1,4 @@
-/* game.c
+/* intro.c
 
    This file written 2016 by Oscar Mattsson
 
@@ -11,20 +11,19 @@
 #include "chipsnake.h"  /* Declatations for game */
 #include "i2c-defs.h" /* Declarations of I2C-specific addresses */
 
-uint8_t gamefield[128][32];
 
 /* Initialize game logic */
-void game_init(void) {
+void intro_init(void) {
 
 }
 
 /* Update program logic */
-void game_update(void) {
+void intro_update(void) {
 
 }
 
 /* Draw game */
-void game_draw(void) {
-  display_string(1, "Game Screen");
+void intro_draw(void) {
+  display_string(1, "Intro Screen");
   display_update();
 }
