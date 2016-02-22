@@ -24,7 +24,7 @@ void user_isr(void) {
   }
 
   if(gamestate == INTRO) {
-    if(introcount >= 50) // Go from intro to menu after 5 seconds
+    if(introcount >= 5) // Go from intro to menu after 5 seconds
       gamestate = MENU;
   }
   if(timeoutcount >= 10) {
@@ -86,6 +86,9 @@ int main(void) {
 	/* SPI2CON bit ON = 1; */
 	SPI2CONSET = 0x8000;
 
+	display_init();
+  display_update();
+
   /* Set up clock */
   /* Initialize clock */
   T2CON = 0x70;              // Stop timer and set prescaling to 1:256
@@ -107,15 +110,11 @@ int main(void) {
   T2CONSET = 0x8000;    // Start clock
   I2C1CONSET = 0x8000;  // Start I2C bus
 
-	display_init();
-  display_update();
-
   intro_init();
   menu_init();
   game_init();
 
   while(1) {
-
     if(gamestate != INTRO) {
       if(PORTD & (1 << 8)) {
         gamestate = MENU;
