@@ -190,7 +190,7 @@ void display_full(const uint8_t *data) {
 
 		for(k = 0; k < 4; k++) {
 			for(j = 0; j < 128; j++) {
-				spi_send_recv(~data[i*128 + j]);
+				spi_send_recv(data[i*128 + j]);
 			}
 		}
 	}
