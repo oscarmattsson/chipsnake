@@ -18,49 +18,35 @@
 uint8_t gamefield[32][128];
 uint8_t gamefieldconv[512];
 
+void game_draw_figures(int x, int y, int height, int width, const uint8_t* array){
+  // tar in x och y värde, höjd, bredd, array som innehåller värdena vi vill skriva ut
+  int i, j;
+  for(i = 0; i < height; i++){
+    for(j = 0; j < width; j++){
+      gamefield[y+i][x+j] = array[i*width + j];
+    }
+  }
+}
+
+void game_draw_figures_r(int x, int y, int height, int width, const uint8_t* array){
+  // tar in x och y värde, höjd, bredd, array som innehåller värdena vi vill skriva ut
+  int i, j;
+  for(i = 0; i < height; i++){
+    for(j = 0; j < width; j++){
+      gamefield[y+i][x+j] = array[i*width + j] == 1 ? 0 : 1;
+    }
+  }
+}
+
 /* Initialize game logic */
 void game_init(void) {
-
-    int i, j, k, n;
-
-    for(i=0; i < 32; i++){
-      for(j=0; j < 128; j++){
-        gamefield[i][j] = game_background[i*128 + j];
-      }
-    }
-
-
-/*
+    int i, j;
     for(i=0; i < 32; i++){
         for(j=0; j < 128; j++){
-            gamefield[i][j] = 0;
+            gamefield[i][j] = game_background[i*128 + j];
         }
     }
-
-*/
-    uint8_t decimal = 0;
-    uint8_t array[8];
-    int m=0;
-
-    for(j=0; j < 4; j++){
-        for(n=0; n < 128; n++){
-            m = j * 8;
-            for(k=0; k < 8; k++){
-                if(gamefield[m][n] == 0){
-                    array[k] = 0; }
-                else{
-                    array[k] = 1; }
-                m++;
-
-            }
-
-            for(i = 7; i >= 0; i--){
-                decimal = decimal * 2 + array[i];
-            }
-
-            gamefieldconv[j*128 + n] = decimal;
-        }
-    }
+    game_draw_figures_r(23, 15, 5, 5, font_min[3]);
 }
 
 /* Update program logic */
@@ -70,5 +56,5 @@ void game_update(void) {
 
 /* Draw game */
 void game_draw(void) {
-    display_full((const uint8_t*)(gamefieldconv));
+    display_full_bin((const uint8_t*)(gamefield));
 }

@@ -222,6 +222,37 @@ void display_update(void) {
 	}
 }
 
+void display_full_bin(const uint8_t data[32][128]){
+	int i, j, k, n;
+	uint8_t decimal = 0;
+	uint8_t array[8];
+	int m=0;
+	uint8_t gamefieldconv[512];
+
+	for(j=0; j < 4; j++){
+			for(n=0; n < 128; n++){
+					m = j * 8;
+					for(k=0; k < 8; k++){
+							if(data[m][n] == 0){
+									array[k] = 0; }
+							else{
+									array[k] = 1; }
+							m++;
+
+					}
+
+					for(i = 7; i >= 0; i--){
+							decimal = decimal * 2 + array[i];
+					}
+
+					gamefieldconv[j*128 + n] = decimal;
+			}
+	}
+
+display_full((const uint8_t*)gamefieldconv);
+
+}
+
 /* Helper function, local to this file.
    Converts a number to hexadecimal ASCII digits. */
 static void num32asc( char * s, int n )
