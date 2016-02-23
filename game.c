@@ -24,12 +24,12 @@ void game_init(void) {
     int i, j, k, n;
 
     for(i=0; i < 32; i++){
-        for(j=0; j < 128; j++){
-            gamefield[i][j] = game_background[i*128 + j];
-        }
+      for(j=0; j < 128; j++){
+        gamefield[i][j] = game_background[i*128 + j];
+      }
     }
 
-    
+
 /*
     for(i=0; i < 32; i++){
         for(j=0; j < 128; j++){
@@ -46,7 +46,7 @@ void game_init(void) {
         for(n=0; n < 128; n++){
             m = j * 8;
             for(k=0; k < 8; k++){
-                if(gamefield[m][j] == 0){
+                if(gamefield[m][n] == 0){
                     array[k] = 0; }
                 else{
                     array[k] = 1; }
@@ -54,7 +54,7 @@ void game_init(void) {
 
             }
 
-            for(i = 0; i < 8; i++){
+            for(i = 7; i >= 0; i--){
                 decimal = decimal * 2 + array[i];
             }
 

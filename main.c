@@ -10,8 +10,9 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "chipsnake.h"  /* Declatations for game */
 
-enum state { INTRO, MENU, GAME, GAME_PAUSE };
+enum state { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP };
 enum state gamestate = INTRO;
+enum state prevgamestate = INTRO;
 
 int timeoutcount = 0;
 int introcount = 0;
@@ -24,8 +25,10 @@ void user_isr(void) {
   }
 
   if(gamestate == INTRO) {
-    if(introcount >= 5) // Go from intro to menu after 5 seconds
+    if(introcount >= 1) { // Go from intro to menu after 5 seconds
+      prevgamestate = INTRO;
       gamestate = MENU;
+    }
   }
   if(timeoutcount >= 10) {
     timeoutcount = 0;
@@ -39,6 +42,18 @@ void user_isr(void) {
         break;
       case GAME:
         game_draw();
+        break;
+      case GAME_END:
+        game_end_draw();
+        break;
+      case HIGHSCORE:
+        highscore_draw();
+        break;
+      case SETTINGS:
+        settings_draw();
+        break;
+      case HELP:
+        help_draw();
         break;
       default:
         break;
@@ -69,7 +84,7 @@ int main(void) {
 	/* Set up input pins */
 	TRISFSET = 0x2; // Button 1
 	TRISDSET = 0xE0; // Buttons 2-4
-  //TRISDSET = 0xF00; // Switches 1-4
+  TRISDSET = 0xF00; // Switches 1-4
 
   /* Set up output pins */
   TRISECLR = 0xFF;
@@ -117,8 +132,12 @@ int main(void) {
   while(1) {
     if(gamestate != INTRO) {
       if(PORTD & (1 << 8)) {
+        display_string(0, "Menu");
+        prevgamestate = gamestate;
         gamestate = MENU;
       } else {
+        display_string(0, "Game");
+        prevgamestate = gamestate;
         gamestate = GAME;
       }
     }
@@ -129,6 +148,14 @@ int main(void) {
       case MENU:
         break;
       case GAME:
+        break;
+      case GAME_END:
+        break;
+      case HIGHSCORE:
+        break;
+      case SETTINGS:
+        break;
+      case HELP:
         break;
       default:
         break;
