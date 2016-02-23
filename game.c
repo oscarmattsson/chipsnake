@@ -16,27 +16,6 @@
 #define gamefieldheight 24
 
 uint8_t gamefield[32][128];
-uint8_t gamefieldconv[512];
-
-void game_draw_figures(int x, int y, int height, int width, const uint8_t* array){
-  // tar in x och y värde, höjd, bredd, array som innehåller värdena vi vill skriva ut
-  int i, j;
-  for(i = 0; i < height; i++){
-    for(j = 0; j < width; j++){
-      gamefield[y+i][x+j] = array[i*width + j];
-    }
-  }
-}
-
-void game_draw_figures_r(int x, int y, int height, int width, const uint8_t* array){
-  // tar in x och y värde, höjd, bredd, array som innehåller värdena vi vill skriva ut
-  int i, j;
-  for(i = 0; i < height; i++){
-    for(j = 0; j < width; j++){
-      gamefield[y+i][x+j] = array[i*width + j] == 1 ? 0 : 1;
-    }
-  }
-}
 
 /* Initialize game logic */
 void game_init(void) {
@@ -46,7 +25,7 @@ void game_init(void) {
             gamefield[i][j] = game_background[i*128 + j];
         }
     }
-    game_draw_figures_r(23, 15, 5, 5, font_min[3]);
+    game_draw_figures_r(23, 15, 5, 5, font_min[3], gamefield);
 }
 
 /* Update program logic */

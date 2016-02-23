@@ -227,7 +227,7 @@ void display_full_bin(const uint8_t data[32][128]){
 	uint8_t decimal = 0;
 	uint8_t array[8];
 	int m=0;
-	uint8_t gamefieldconv[512];
+	uint8_t decdata[128*4];
 
 	for(j=0; j < 4; j++){
 			for(n=0; n < 128; n++){
@@ -240,17 +240,13 @@ void display_full_bin(const uint8_t data[32][128]){
 							m++;
 
 					}
-
 					for(i = 7; i >= 0; i--){
 							decimal = decimal * 2 + array[i];
 					}
-
-					gamefieldconv[j*128 + n] = decimal;
+					decdata[j*128 + n] = decimal;
 			}
 	}
-
-display_full((const uint8_t*)gamefieldconv);
-
+	display_full((const uint8_t*)decdata);
 }
 
 /* Helper function, local to this file.
@@ -260,4 +256,24 @@ static void num32asc( char * s, int n )
   int i;
   for( i = 28; i >= 0; i -= 4 )
     *s++ = "0123456789ABCDEF"[ (n >> i) & 15 ];
+}
+
+void game_draw_figures(int x, int y, int height, int width,
+	const uint8_t src[], uint8_t dest[128][32]){
+  int i, j;
+  for(i = 0; i < height; i++){
+    for(j = 0; j < width; j++){
+      dest[y+i][x+j] = src[i*width + j];
+    }
+  }
+}
+
+void game_draw_figures_r(int x, int y, int height, int width,
+	const uint8_t src[], uint8_t dest[32][128]){
+  int i, j;
+  for(i = 0; i < height; i++){
+    for(j = 0; j < width; j++){
+      dest[y+i][x+j] = src[i*width + j] == 1 ? 0 : 1;
+    }
+  }
 }
