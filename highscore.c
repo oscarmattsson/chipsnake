@@ -11,8 +11,6 @@
 #include "chipsnake.h"  /* Declatations for game */
 #include "i2c-defs.h" /* Declarations of I2C-specific addresses */
 
-int row = 0;
-
 /* Initialize game logic */
 void highscore_init(void) {
 
@@ -25,6 +23,6 @@ void highscore_update(void) {
 
 /* Draw game */
 void highscore_draw(void) {
-  display_string(row, "HIGHSCORE");
+  display_string(0, "Highscore Screen");
   display_update();
 }
