@@ -132,11 +132,9 @@ int main(void) {
   while(1) {
     if(gamestate != INTRO) {
       if(PORTD & (1 << 8)) {
-        display_string(0, "Menu");
         prevgamestate = gamestate;
         gamestate = MENU;
       } else {
-        display_string(0, "Game");
         prevgamestate = gamestate;
         gamestate = GAME;
       }
