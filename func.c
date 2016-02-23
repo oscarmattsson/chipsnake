@@ -188,10 +188,8 @@ void display_full(const uint8_t *data) {
 
 		DISPLAY_CHANGE_TO_DATA_MODE;
 
-		for(k = 0; k < 4; k++) {
-			for(j = 0; j < 128; j++) {
-				spi_send_recv(data[i*128 + j]);
-			}
+		for(j = 0; j < 128; j++) {
+			spi_send_recv(data[i*128 + j]);
 		}
 	}
 }
@@ -224,7 +222,7 @@ void display_update(void) {
 	}
 }
 
-void display_full_bin(const uint8_t *data){
+void display_full_bin(const uint8_t data[32][128]){
 	int i, j, k, n;
 	uint8_t decimal = 0;
 	uint8_t array[8];

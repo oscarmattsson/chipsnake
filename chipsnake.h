@@ -52,6 +52,10 @@ extern const uint8_t const font[128*8];
 extern char textbuffer[4][16];
 /* Declare bitmap array containing snake */
 extern const uint8_t const game_background[128*32];
+/* Declare bitmap array containing numbers */
+extern const uint8_t const numbers[11][15];
+/* Declare bitmap array containing small font */
+extern const uint8_t const font_min[27][25];
 
 /* Freeze the program for a set amount of milliseconds */
 void delay(int);
