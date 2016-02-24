@@ -354,7 +354,7 @@ const uint8_t const numbers[11][15] = {
 	},
 };
 
-const uint8_t const font_min[27][25] = {
+const uint8_t const letters[27][25] = {
 	{
 		1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1,

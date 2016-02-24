@@ -258,22 +258,81 @@ static void num32asc( char * s, int n )
     *s++ = "0123456789ABCDEF"[ (n >> i) & 15 ];
 }
 
-void game_draw_figures(int x, int y, int height, int width,
-	const uint8_t src[], uint8_t dest[128][32]){
+/* Insert an object into a "binary" screen array. */
+void insert_object(int x, int y, int height, int width,
+	const uint8_t src[], uint8_t dest[32][128], int reverse){
   int i, j;
   for(i = 0; i < height; i++){
     for(j = 0; j < width; j++){
-      dest[y+i][x+j] = src[i*width + j];
+			if(reverse)
+				dest[y+i][x+j] = src[i*width + j];
+			else
+	      dest[y+i][x+j] = src[i*width + j] > 0 ? 0 : 1;
     }
   }
 }
 
-void game_draw_figures_r(int x, int y, int height, int width,
-	const uint8_t src[], uint8_t dest[32][128]){
-  int i, j;
-  for(i = 0; i < height; i++){
-    for(j = 0; j < width; j++){
-      dest[y+i][x+j] = src[i*width + j] == 1 ? 0 : 1;
-    }
-  }
+/* Insert a character (0-9 or A-Z) into a "binary" screen array.
+	 Other chars will be interpreted as a blank space.
+	 Returns offset to next character position. */
+int insert_char(int x, int y, char c, uint8_t dest[32][128], int reverse) {
+	if(x >= 0 && x + 3 < 128) {	// Only draw on this row
+		if(c >= 48 && c <= 57) { 	// If c is a number (0-9)
+			c -= 47;
+			insert_object(x, y, 5, 3, numbers[c], dest, reverse);
+			return 4;
+		}
+	}
+	if(x >= 0 && x + 5 <= 128) {	// Only draw on this row
+		if(c >= 65) {
+			if(c >= 97 && c <= 122)	// If c is a lowercase letter (a-z)
+				c -= (97 - 65); 			// Turn lower case into uppercase
+			if(c <= 90) { 					// If c is an uppercase letter (A-Z)
+				c -= 64;
+				insert_object(x, y, 5, 5, letters[c], dest, reverse);
+			}
+		}
+		else {
+			insert_object(x, y, 5, 5, letters[0], dest, reverse);
+		}
+		return 6;
+	}
+	return 0;
+}
+
+/* Insert a string of characters (0-9 or A-Z) into a "binary" screen array.
+	 Uses insert_char to insert each character.
+	 Returns offset to next character position */
+int insert_string(int x, int y, const char* s, uint8_t dest[32][128], int reverse) {
+	int offset = 0;
+	while(*s != 0 && x + offset < 128) {
+		offset += insert_char(x + offset, y, *s, dest, reverse);
+		s++;
+	}
+	return offset;
+}
+
+/* Insert a number (0-9) into a "binary" screen array.
+	 Larger numbers will be inserted recursively in
+	 sequence after eachother.
+   Negative numbers will be interpreted as a blank space.
+	 Returns offset to next character position. */
+int insert_num(int x, int y, int n, uint8_t dest[32][128], int reverse) {
+	if(n > 9) { 																							// If n is larger than 9, start recursion
+		int offset = insert_num(x, y, n / 10, dest, reverse);	// Recursive call on n / 10
+		insert_object(x + offset, y, 5, 3,											// Once returned from recursion, draw lowest digit
+			numbers[(n % 10) + 1], dest, reverse);
+		return offset + 4; 																			// Increase offset for each digit
+	}
+	else if(n >= 0) {	// Single digit or end of recursion
+		insert_object(x, y, 5, 3, numbers[n + 1], dest, reverse);
+		return 4;
+	}
+	else // Draw single space
+		insert_object(x, y, 5, 3, numbers[0], dest, reverse);
+	return 4;
+}
+
+void insert_square(int x, int y, int width, int height, uint8[32][128], int reverse) {
+	
 }

@@ -18,10 +18,10 @@ for y in range(0, 32):
 f = open("icon.txt","w")
 f.write("# Move to mipslabdata.c\n")
 f.write("const uint8_t const " + name + "[] = {\n")
-for y in range(0, width):
+for y in range(0, height):
     s = "\t"
-    for x in range(0, 32):
-        s+= str(icon[x + y*32]) + ", "
+    for x in range(0, width):
+        s+= str(icon[x + y*height]) + ", "
     f.write(s + "\n")
 f.write("};")
 f.write("\n\n# Move to mipslab.h\n")

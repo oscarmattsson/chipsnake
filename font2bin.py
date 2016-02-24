@@ -19,7 +19,7 @@ for letter in range(0, 26):
 
 f = open("icon.txt","w")
 f.write("# Move to mipslabdata.c\n")
-f.write("const uint8_t const font_min[26][25] = {\n")
+f.write("const uint8_t const letters[26][25] = {\n")
 for letter in range(0, 26):
     f.write("\t{\n")
     for y in range(0, 5):
@@ -30,7 +30,7 @@ for letter in range(0, 26):
     f.write("\t},\n")
 f.write("};")
 f.write("\n\n# Move to mipslab.h\n")
-f.write("/* Declare bitmap array containing font_min */\n")
-f.write("extern const uint8_t const font_min[26][25];")
+f.write("/* Declare bitmap array containing letters */\n")
+f.write("extern const uint8_t const letters[26][25];")
 f.close()
 print "Code output to: icon.txt"

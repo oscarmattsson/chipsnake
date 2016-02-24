@@ -25,7 +25,10 @@ void game_init(void) {
             gamefield[i][j] = game_background[i*128 + j];
         }
     }
-    game_draw_figures_r(23, 15, 5, 5, font_min[3], gamefield);
+    //insert_char(26, 10, 'Z', gamefield, 0);
+    insert_num(26, 26, 0001, gamefield, 1);
+    int offset = insert_string(2, 2, "Hello 123 world", gamefield, 0);
+    insert_string(2 + offset, 2, " or something", gamefield, 0);
 }
 
 /* Update program logic */

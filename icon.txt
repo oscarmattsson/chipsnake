@@ -1,5 +1,5 @@
 # Move to mipslabdata.c
-const uint8_t const font_min[26][25] = {
+const uint8_t const letters[26][25] = {
 	{
 		1, 0, 0, 0, 1, 
 		0, 1, 1, 1, 0, 
@@ -185,5 +185,5 @@ const uint8_t const font_min[26][25] = {
 };
 
 # Move to mipslab.h
-/* Declare bitmap array containing font_min */
-extern const uint8_t const font_min[26][25];
+/* Declare bitmap array containing letters */
+extern const uint8_t const letters[26][25];
