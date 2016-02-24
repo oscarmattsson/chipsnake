@@ -25,10 +25,11 @@ void game_init(void) {
             gamefield[i][j] = game_background[i*128 + j];
         }
     }
-    //insert_char(26, 10, 'Z', gamefield, 0);
+    /*insert_char(26, 10, 'Z', gamefield, 0);
     insert_num(26, 26, 0001, gamefield, 1);
     int offset = insert_string(2, 2, "Hello 123 world", gamefield, 0);
     insert_string(2 + offset, 2, " or something", gamefield, 0);
+    insert_square(8, 8, 3, 50, 1, gamefield);*/
 }
 
 /* Update program logic */
@@ -38,5 +39,5 @@ void game_update(void) {
 
 /* Draw game */
 void game_draw(void) {
-    display_full_bin((const uint8_t*)(gamefield));
+    display_full_bin(gamefield);
 }

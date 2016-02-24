@@ -333,6 +333,11 @@ int insert_num(int x, int y, int n, uint8_t dest[32][128], int reverse) {
 	return 4;
 }
 
-void insert_square(int x, int y, int width, int height, uint8[32][128], int reverse) {
-	
+void insert_square(int x, int y, int height, int width, int value, uint8_t dest[32][128]) {
+	int sy, sx;
+	for(sy = y; sy < y + height; sy++) {
+		for(sx = x; sx < x + width; sx++) {
+			dest[sy][sx] = value;
+		}
+	}
 }

@@ -11,10 +11,18 @@
 #include "chipsnake.h"  /* Declatations for game */
 #include "i2c-defs.h" /* Declarations of I2C-specific addresses */
 
+uint8_t menufield[32][128];
 
 /* Initialize game logic */
 void menu_init(void) {
+  int x, y;
+  for(y = 0; y < 32; y++) {
+    for(x = 0; x < 128; x++) {
+      menufield[y][x] = 0;
+    }
+  }
 
+  insert_square(0, 0, 7, 128, 1, menufield);
 }
 
 /* Update program logic */
@@ -24,6 +32,5 @@ void menu_update(void) {
 
 /* Draw game */
 void menu_draw(void) {
-  display_string(1, "Menu Screen");
-  display_update();
+  display_full_bin(menufield);
 }
