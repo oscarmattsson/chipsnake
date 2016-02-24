@@ -37,7 +37,64 @@ void game_update(void) {
 
 }
 
+void game_snake(void){
+  // insert_square(int x, int y, int height, int width, int value, uint8_t dest[32][128]);
+  // plus är nedåt
+  int x = 40, y = 30, height = 1, width = 2, value = 3;
+  int i, length;
+  length = 3;
+
+  // if move up --------------
+  if (value == 2){
+    for(i = 0; i <length; i++){
+      insert_square(x, y, width, height, value, gamefield);
+      insert_square(x+1, y+1, width, height, value, gamefield);
+      y = y-4;
+    }
+    // Head towards up
+    insert_square(x, y, width, height, value, gamefield);
+    insert_square(x+1, y, 4, height, value, gamefield);
+  }
+  // if move right -----------
+  if (value == 3){
+    for(i = 0; i <length; i++){
+      insert_square(x, y, height, width, value, gamefield);
+      insert_square(x-1, y+1, height, width, value, gamefield);
+      x = x+4;
+    }
+    // Head towards right
+    insert_square(x, y, height, width, value, gamefield);
+    insert_square(x-1, y+1, height, 4, value, gamefield);
+  }
+  // if move down -----------
+  if (value == 4){
+    for(i = 0; i <length; i++){
+      insert_square(x, y, width, height, value, gamefield);
+      insert_square(x+1, y-1, width, height, value, gamefield);
+      y = y+4;
+    }
+    // Head towards down
+    insert_square(x, y, width, height, value, gamefield);
+    insert_square(x+1, y-1, 4, height, value, gamefield);
+  }
+
+  // if move left ------------
+  if (value == 5){
+    for(i = 0; i <length; i++){
+      insert_square(x, y, height, width, value, gamefield);
+      insert_square(x+1, y+1, height, width, value, gamefield);
+      x = x-4;
+    }
+    // Head towards left
+    insert_square(x-3, y, height, width, value, gamefield);
+    insert_square(x-3, y+1, height, 4, value, gamefield);
+  }
+
+
+}
+
 /* Draw game */
 void game_draw(void) {
+    game_snake();
     display_full_bin(gamefield);
 }
