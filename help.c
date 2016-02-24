@@ -17,7 +17,7 @@ void help_init(void) {
 }
 
 /* Update program logic */
-void help_update(void) {
+void help_update(int* buttons, int* switches) {
 
 }
 

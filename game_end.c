@@ -17,7 +17,7 @@ void game_end_init(void) {
 }
 
 /* Update program logic */
-void game_end_update(void) {
+void game_end_update(int* buttons, int* switches) {
 
 }
 

@@ -33,7 +33,7 @@ void game_init(void) {
 }
 
 /* Update program logic */
-void game_update(void) {
+void game_update(int* buttons, int* switches) {
 
 }
 

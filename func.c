@@ -295,9 +295,8 @@ int insert_char(int x, int y, char c, uint8_t dest[32][128], int reverse) {
 		else {
 			insert_object(x, y, 5, 5, letters[0], dest, reverse);
 		}
-		return 6;
 	}
-	return 0;
+	return 6;
 }
 
 /* Insert a string of characters (0-9 or A-Z) into a "binary" screen array.
@@ -305,7 +304,7 @@ int insert_char(int x, int y, char c, uint8_t dest[32][128], int reverse) {
 	 Returns offset to next character position */
 int insert_string(int x, int y, const char* s, uint8_t dest[32][128], int reverse) {
 	int offset = 0;
-	while(*s != 0 && x + offset < 128) {
+	while(*s != 0) {
 		offset += insert_char(x + offset, y, *s, dest, reverse);
 		s++;
 	}
@@ -333,6 +332,9 @@ int insert_num(int x, int y, int n, uint8_t dest[32][128], int reverse) {
 	return 4;
 }
 
+/* Insert a square into a "binary" screen array.
+	 The value inserted in each index of the array
+	 is specified in a parameter */
 void insert_square(int x, int y, int height, int width, int value, uint8_t dest[32][128]) {
 	int sy, sx;
 	for(sy = y; sy < y + height; sy++) {

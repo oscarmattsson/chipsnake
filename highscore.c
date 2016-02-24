@@ -17,7 +17,7 @@ void highscore_init(void) {
 }
 
 /* Update program logic */
-void highscore_update(void) {
+void highscore_update(int* buttons, int* switches) {
 
 }
 
