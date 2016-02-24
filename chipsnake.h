@@ -37,6 +37,26 @@ void game_init(void);
 void game_update(int* buttons, int* switches);
 void game_draw(void);
 
+/* Declare functions from highscore.c */
+void highscore_init(void);
+void highscore_update(int* buttons, int* switches);
+void highscore_draw(void);
+
+/* Declare functions from game_end.c */
+void game_end_init(void);
+void game_end_update(int* buttons, int* switches);
+void game_end_draw(void);
+
+/* Declare functions from help.c */
+void help_init(void);
+void help_update(int* buttons, int* switches);
+void help_draw(void);
+
+/* Declare functions from settings.c */
+void settings_init(void);
+void settings_update(int* buttons, int* switches);
+void settings_draw(void);
+
 /* Declare display_debug - a function to help debugging.
 
    After calling display_debug,
@@ -66,6 +86,14 @@ extern const uint8_t const arrow_up[25];
 extern const uint8_t const arrow_down[25];
 extern const uint8_t const arrow_left[15];
 extern const uint8_t const arrow_right[15];
+/* Declare bitmap arrays containing game food items */
+extern const uint8_t const food_regular[4];
+extern const uint8_t const food_lizard[21];
+extern const uint8_t const food_mouse[21];
+extern const uint8_t const food_bird[30];
+extern const uint8_t const food_spider[32];
+extern const uint8_t const food_frog[32];
+extern const uint8_t const food_turtle[32];
 
 /* Freeze the program for a set amount of milliseconds */
 void delay(int);

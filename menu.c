@@ -31,15 +31,15 @@ void menu_init(void) {
   // Set top and bottom bars
   insert_square(0, 0, 7, 128, 1, menufield);
   insert_square(0, 24, 7, 128, 1, menufield);
-  insert_string(1, 1, "menu", menufield, 1);
-  insert_string(4, 25, "left", menufield, 1);
-  insert_string(33, 25, "right", menufield, 1);
-  insert_string(71, 25, "sel", menufield, 1);
-  insert_string(100, 25, "back", menufield, 1);
-  insert_string(97, 1, "play", menufield, 1);
-  insert_object(122, 1, 5, 5, arrow_down, menufield, 1);
-  insert_object(3, 13, 5, 3, arrow_left, menufield, 0);
-  insert_object(124, 13, 5, 3, arrow_right, menufield, 0);
+  insert_string(1, 1, "menu", menufield, 0);
+  insert_string(4, 25, "left", menufield, 0);
+  insert_string(33, 25, "right", menufield, 0);
+  insert_string(71, 25, "sel", menufield, 0);
+  insert_string(100, 25, "back", menufield, 0);
+  insert_string(97, 1, "play", menufield, 0);
+  insert_object(122, 1, 5, 5, arrow_down, menufield, 0);
+  insert_object(3, 13, 5, 3, arrow_left, menufield, 1);
+  insert_object(124, 13, 5, 3, arrow_right, menufield, 1);
 
   // Set up menu options
 }
@@ -57,13 +57,13 @@ void menu_draw(void) {
   insert_square(7, 8, 15, 116, 0, menufield);
   switch(menuselection) {
     case 0:
-      insert_string(center - (sizeof("Highscore")*6) / 2, 13, "Highscore", menufield, 0);
+      insert_string(center - (sizeof("Highscore")*6) / 2, 13, "Highscore", menufield, 1);
       break;
     case 1:
-      insert_string(center - (sizeof("Settings")*6) / 2, 13, "Settings", menufield, 0);
+      insert_string(center - (sizeof("Settings")*6) / 2, 13, "Settings", menufield, 1);
       break;
     case 2:
-      insert_string(center - (sizeof("Help")*6) / 2, 13, "Help", menufield, 0);
+      insert_string(center - (sizeof("Help")*6) / 2, 13, "Help", menufield, 1);
       break;
   }
   display_full_bin(menufield);

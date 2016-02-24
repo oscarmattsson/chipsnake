@@ -222,6 +222,7 @@ void display_update(void) {
 	}
 }
 
+/* Convert 128x32 bit array to 128x4 byte arra */
 void display_full_bin(const uint8_t data[32][128]){
 	int i, j, k, n;
 	uint8_t decimal = 0;
@@ -264,7 +265,7 @@ void insert_object(int x, int y, int height, int width,
   int i, j;
   for(i = 0; i < height; i++){
     for(j = 0; j < width; j++){
-			if(reverse)
+			if(!reverse)
 				dest[y+i][x+j] = src[i*width + j];
 			else
 	      dest[y+i][x+j] = src[i*width + j] > 0 ? 0 : 1;
