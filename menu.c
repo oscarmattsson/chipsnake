@@ -11,9 +11,10 @@
 #include "chipsnake.h"  /* Declatations for game */
 #include "i2c-defs.h" /* Declarations of I2C-specific addresses */
 
-#define NUM_MENU_ITEMS 3
+#define NUM_MENU_ITEMS 4
 
 int menuselection = 0;
+int confirmbox = 0;
 
 /* Initialize menu logic */
 void menu_init(void) {
@@ -45,18 +46,28 @@ void menu_init(void) {
 void menu_update(int* buttons, int* switches) {
   if(buttons[3]) // Left button
     menuselection = (menuselection == 0 ? NUM_MENU_ITEMS - 1 : menuselection - 1);
-  if(buttons[2]) // Right button
-    menuselection = (menuselection + 1) % NUM_MENU_ITEMS;
+  if(buttons[2]) { // Right button
+    if(confirmbox) {
+      game_init();
+      menu_init();
+      confirmbox = 0;
+    }
+    else
+      menuselection = (menuselection + 1) % NUM_MENU_ITEMS;
+  }
   if(buttons[1]) {
-    switch(menuselection) {
-      case 0:
-        gamestate = HIGHSCORE;
-        break;
-      case 1:
-        gamestate = SETTINGS;
-        break;
-      case 2:
-        gamestate = HELP;
+    if(menuselection == 0)
+      gamestate = HIGHSCORE;
+    else if(menuselection == 1)
+      gamestate = SETTINGS;
+    else if(menuselection == 2)
+      gamestate = HELP;
+    else if(menuselection == 3) {
+      if(confirmbox) {
+        confirmbox = 0;
+        menu_init();
+      }
+      else confirmbox = 1;
     }
   }
 }
@@ -66,17 +77,28 @@ void menu_draw(void) {
 
   int center = 128 / 2;
 
-  insert_square(7, 8, 15, 116, 0, menufield);
-  switch(menuselection) {
-    case 0:
-      insert_string(center - (sizeof("Highscore")*6) / 2, 13, "Highscore", menufield, 1);
-      break;
-    case 1:
-      insert_string(center - (sizeof("Settings")*6) / 2, 13, "Settings", menufield, 1);
-      break;
-    case 2:
-      insert_string(center - (sizeof("Help")*6) / 2, 13, "Help", menufield, 1);
-      break;
+  if(confirmbox) {
+    insert_square(0, 7, 17, 128, 0, menufield);
+    insert_string(center - (sizeof("Are you sure")*6) / 2, 13, "Are you sure", menufield, 1);
+    insert_square(0, 24, 7, 128, 1, menufield);
+    insert_string(39, 25, "YES", menufield, 0);
+    insert_string(74, 25, "NO", menufield, 0);
+  }
+  else {
+    insert_square(7, 7, 17, 116, 0, menufield);
+    switch(menuselection) {
+      case 0:
+        insert_string(center - (sizeof("Highscore")*6) / 2, 13, "Highscore", menufield, 1);
+        break;
+      case 1:
+        insert_string(center - (sizeof("Settings")*6) / 2, 13, "Settings", menufield, 1);
+        break;
+      case 2:
+        insert_string(center - (sizeof("Help")*6) / 2, 13, "Help", menufield, 1);
+        break;
+      case 3:
+        insert_string(center - (sizeof("Restart Game")*6) / 2, 13, "Restart Game", menufield, 1);
+    }
   }
   display_full_bin(menufield);
 }
