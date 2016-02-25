@@ -13,8 +13,6 @@
 
 #define NUM_MENU_ITEMS 3
 
-uint8_t menufield[32][128];
-int center = 128 / 2;
 int menuselection = 0;
 
 /* Initialize menu logic */
@@ -35,13 +33,12 @@ void menu_init(void) {
   insert_string(4, 25, "left", menufield, 0);
   insert_string(33, 25, "right", menufield, 0);
   insert_string(71, 25, "sel", menufield, 0);
-  insert_string(100, 25, "back", menufield, 0);
+  //insert_string(100, 25, "back", menufield, 0);
   insert_string(97, 1, "play", menufield, 0);
   insert_object(122, 1, 5, 5, arrow_down, menufield, 0);
   insert_object(3, 13, 5, 3, arrow_left, menufield, 1);
   insert_object(124, 13, 5, 3, arrow_right, menufield, 1);
 
-  // Set up menu options
 }
 
 /* Update program logic */
@@ -50,10 +47,25 @@ void menu_update(int* buttons, int* switches) {
     menuselection = (menuselection == 0 ? NUM_MENU_ITEMS - 1 : menuselection - 1);
   if(buttons[2]) // Right button
     menuselection = (menuselection + 1) % NUM_MENU_ITEMS;
+  if(buttons[1]) {
+    switch(menuselection) {
+      case 0:
+        gamestate = HIGHSCORE;
+        break;
+      case 1:
+        gamestate = SETTINGS;
+        break;
+      case 2:
+        gamestate = HELP;
+    }
+  }
 }
 
 /* Draw game */
 void menu_draw(void) {
+
+  int center = 128 / 2;
+
   insert_square(7, 8, 15, 116, 0, menufield);
   switch(menuselection) {
     case 0:

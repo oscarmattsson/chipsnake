@@ -11,19 +11,32 @@
 #include "chipsnake.h"  /* Declatations for game */
 #include "i2c-defs.h" /* Declarations of I2C-specific addresses */
 
+#define CENTER 128 / 2
 
-/* Initialize game logic */
+uint8_t introfield[32][128];
+
+/* Initialize intro logic */
 void intro_init(void) {
 
+  // Clear screen
+  int x, y;
+  for(y = 0; y < 32; y++) {
+    for(x = 0; x < 128; x++) {
+      introfield[y][x] = 0;
+    }
+  }
+
+  // Set up intro screen
+  char title[] = "CHIPSNAKE";
+  insert_string(CENTER - (sizeof(title)*6) / 2, 12, title, introfield, 1);
 }
 
-/* Update program logic */
+/* Update intro logic */
 void intro_update(int* buttons, int* switches) {
-
+  insert_string(CENTER - (sizeof("Flip right switch up")*6) / 2, 19, "Flip right switch up", introfield, 1);
 }
 
 /* Draw game */
 void intro_draw(void) {
-  display_string(1, "Intro Screen");
-  display_update();
+  display_full_bin(introfield);
 }

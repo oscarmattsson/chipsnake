@@ -10,15 +10,71 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "chipsnake.h"  /* Declatations for game */
 
-enum state { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP };
-enum state gamestate = INTRO;
-enum state prevgamestate = INTRO;
+#define INTRO_TIME 3
+
+state gamestate = INTRO;
+state prevgamestate = INTRO;
+
+uint8_t menufield[32][128];
 
 int timeoutcount = 0;
 int introcount = 0;
 
 int buttons[4] = { 0, 0, 0, 0 };
 int switches[4] = { 0, 0, 0, 0 };
+
+/* Update state of program */
+void update(void) {
+  state tempgamestate = gamestate;
+  switch(gamestate) {
+    case INTRO:
+      if(introcount >= INTRO_TIME) {
+        if(switches[0])
+          gamestate = MENU;
+        else
+          intro_update(buttons, switches);
+      }
+      intro_draw();
+      break;
+    case MENU:
+      if(!switches[0])
+        gamestate = GAME;
+      menu_init();
+      menu_update(buttons, switches);
+      menu_draw();
+      break;
+    case GAME:
+      if(switches[0])
+        gamestate = MENU;
+      if(prevgamestate != GAME)
+        game_draw();
+      game_update(buttons, switches);
+      break;
+    case GAME_END:
+      game_end_init();
+      game_end_update(buttons, switches);
+      game_end_draw();
+      break;
+    case HIGHSCORE:
+      highscore_init();
+      highscore_update(buttons, switches);
+      highscore_draw();
+      break;
+    case SETTINGS:
+      settings_init();
+      settings_update(buttons, switches);
+      settings_draw();
+      break;
+    case HELP:
+      help_init();
+      help_update(buttons, switches);
+      help_draw();
+      break;
+    default:
+      break;
+  }
+  prevgamestate = tempgamestate;
+}
 
 /* Interrupt Service Routine */
 void user_isr(void) {
@@ -27,17 +83,16 @@ void user_isr(void) {
     IFSCLR(0) = (1 << 8);
   }
 
-  if(gamestate == INTRO) {
-    if(introcount >= 1) { // Go from intro to menu after 5 seconds
-      prevgamestate = INTRO;
-      gamestate = MENU;
-      switches[0] = -1;
-    }
-  }
   if(timeoutcount >= 10) {
     timeoutcount = 0;
-    if(gamestate == INTRO)
-      introcount++;
+    if(gamestate == INTRO) {
+      if(introcount < INTRO_TIME)
+        introcount++;
+      else
+        update();
+    }
+    else if(gamestate == MENU)
+      menu_draw();
     else if(gamestate == GAME)
       game_draw();
   }
@@ -84,7 +139,6 @@ int main(void) {
 	SPI2CONSET = 0x8000;
 
 	display_init();
-  display_update();
 
   /* Set up clock */
   /* Initialize clock */
@@ -107,21 +161,19 @@ int main(void) {
   T2CONSET = 0x8000;    // Start clock
   I2C1CONSET = 0x8000;  // Start I2C bus
 
+  /* Program initialization */
+
   intro_init();
   menu_init();
   game_init();
+  highscore_init();
+  help_init();
+  game_end_init();
+  settings_init();
+
+  update();
 
   while(1) {
-
-    if(gamestate != INTRO) {
-      if(PORTD & (1 << 8)) {
-        prevgamestate = gamestate;
-        gamestate = MENU;
-      } else {
-        prevgamestate = gamestate;
-        gamestate = GAME;
-      }
-    }
 
     if(buttons[0] != (PORTF & 1 << 1) ||
        buttons[1] != (PORTD & 1 << 5) ||
@@ -130,8 +182,8 @@ int main(void) {
        switches[0] != (PORTD & 1 << 8) ||
        switches[1] != (PORTD & 1 << 9) ||
        switches[2] != (PORTD & 1 << 10) ||
-       switches[3] != (PORTD & 1 << 11)
-       ) {
+       switches[3] != (PORTD & 1 << 11) ||
+       prevgamestate != gamestate) {
 
       buttons[0] = PORTF & 1 << 1;
       buttons[1] = PORTD & 1 << 5;
@@ -142,39 +194,7 @@ int main(void) {
       switches[2] = PORTD & 1 << 10;
       switches[3] = PORTD & 1 << 11;
 
-      switch(gamestate) {
-        case INTRO:
-          intro_update(buttons, switches); // TODO: Remove or implement
-          intro_draw();
-          break;
-        case MENU:
-          menu_update(buttons, switches);
-          menu_draw();
-          break;
-        case GAME:
-          if(prevgamestate != GAME)
-            game_draw();
-          game_update(buttons, switches);
-          break;
-        case GAME_END:
-          game_end_update(buttons, switches);
-          game_end_draw();
-          break;
-        case HIGHSCORE:
-          highscore_update(buttons, switches);
-          highscore_draw();
-          break;
-        case SETTINGS:
-          settings_update(buttons, switches);
-          settings_draw();
-          break;
-        case HELP:
-          help_update(buttons, switches);
-          help_draw();
-          break;
-        default:
-          break;
-      }
+      update();
     }
   }
 }

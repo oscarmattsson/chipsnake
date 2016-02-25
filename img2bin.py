@@ -21,11 +21,11 @@ f.write("const uint8_t const " + name + "[] = {\n")
 for y in range(0, height):
     s = "\t"
     for x in range(0, width):
-        s+= str(icon[x + y*height]) + ", "
+        s+= str(icon[x + y*width]) + ", "
     f.write(s + "\n")
 f.write("};")
 f.write("\n\n# Move to mipslab.h\n")
 f.write("/* Declare bitmap array containing " + name + " */\n")
 f.write("extern const uint8_t const " + name + "[" + str(width*32) + "];")
 f.close()
-print "Code output to: icon.txt"
+print str(width) + ", " + str(height) + ", Code output to: icon.txt"
