@@ -10,7 +10,7 @@ im = Image.open(path)
 pix = im.load()
 width, height = im.size
 icon = []
-for y in range(0, 32):
+for y in range(0, height):
     for x in range(0, width):
         icon.append(str((((pix[x,y][0] + pix[x,y][1] + pix[x,y][2]) / 3) + 126) / 255))
 
@@ -26,6 +26,6 @@ for y in range(0, height):
 f.write("};")
 f.write("\n\n# Move to mipslab.h\n")
 f.write("/* Declare bitmap array containing " + name + " */\n")
-f.write("extern const uint8_t const " + name + "[" + str(width*32) + "];")
+f.write("extern const uint8_t const " + name + "[" + str(width*height) + "];")
 f.close()
-print str(width) + ", " + str(height) + ", Code output to: icon.txt"
+print "Code output to: icon.txt"

@@ -60,12 +60,15 @@ void settings_init(void);
 void settings_update(int* buttons, int* switches);
 void settings_draw(void);
 
-/* Declare bitmap array containing snake */
+/* Declare bitmap array containing game background */
 extern const uint8_t const game_background[128*32];
 /* Declare bitmap array containing numbers */
 extern const uint8_t const numbers[11][15];
 /* Declare bitmap array containing small font */
 extern const uint8_t const letters[27][25];
+/* Declare bitmap arrays for intro graphics */
+extern const uint8_t const intro_snake[480];
+extern const uint8_t const intro_mouse[560];
 /* Declare bitmap arrays containing directional arrows */
 extern const uint8_t const arrow_up[25];
 extern const uint8_t const arrow_down[25];

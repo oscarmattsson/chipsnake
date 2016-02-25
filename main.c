@@ -91,10 +91,10 @@ void user_isr(void) {
       else
         update();
     }
-    else if(gamestate == MENU)
-      menu_draw();
-    else if(gamestate == GAME)
+    else if(gamestate == GAME) {
+      //game_move();
       game_draw();
+    }
   }
 }
 
@@ -162,14 +162,8 @@ int main(void) {
   I2C1CONSET = 0x8000;  // Start I2C bus
 
   /* Program initialization */
-
-  intro_init();
-  menu_init();
   game_init();
-  highscore_init();
-  help_init();
-  game_end_init();
-  settings_init();
+  intro_init();
 
   update();
 
