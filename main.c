@@ -17,6 +17,9 @@ enum state prevgamestate = INTRO;
 int timeoutcount = 0;
 int introcount = 0;
 
+int buttons[4] = { 0, 0, 0, 0 };
+int switches[4] = { 0, 0, 0, 0 };
+
 /* Interrupt Service Routine */
 void user_isr(void) {
   if(IFS(0) & (1 << 8)) {
@@ -28,36 +31,15 @@ void user_isr(void) {
     if(introcount >= 1) { // Go from intro to menu after 5 seconds
       prevgamestate = INTRO;
       gamestate = MENU;
+      switches[0] = -1;
     }
   }
   if(timeoutcount >= 10) {
     timeoutcount = 0;
-    switch(gamestate) {
-      case INTRO:
-        introcount++;
-        intro_draw();
-        break;
-      case MENU:
-        menu_draw();
-        break;
-      case GAME:
-        game_draw();
-        break;
-      case GAME_END:
-        game_end_draw();
-        break;
-      case HIGHSCORE:
-        highscore_draw();
-        break;
-      case SETTINGS:
-        settings_draw();
-        break;
-      case HELP:
-        help_draw();
-        break;
-      default:
-        break;
-    }
+    if(gamestate == INTRO)
+      introcount++;
+    else if(gamestate == GAME)
+      game_draw();
   }
 }
 
@@ -130,6 +112,7 @@ int main(void) {
   game_init();
 
   while(1) {
+
     if(gamestate != INTRO) {
       if(PORTD & (1 << 8)) {
         prevgamestate = gamestate;
@@ -140,23 +123,58 @@ int main(void) {
       }
     }
 
-    switch(gamestate) {
-      case INTRO:
-        break;
-      case MENU:
-        break;
-      case GAME:
-        break;
-      case GAME_END:
-        break;
-      case HIGHSCORE:
-        break;
-      case SETTINGS:
-        break;
-      case HELP:
-        break;
-      default:
-        break;
+    if(buttons[0] != (PORTF & 1 << 1) ||
+       buttons[1] != (PORTD & 1 << 5) ||
+       buttons[2] != (PORTD & 1 << 6) ||
+       buttons[3] != (PORTD & 1 << 7) ||
+       switches[0] != (PORTD & 1 << 8) ||
+       switches[1] != (PORTD & 1 << 9) ||
+       switches[2] != (PORTD & 1 << 10) ||
+       switches[3] != (PORTD & 1 << 11)
+       ) {
+
+      buttons[0] = PORTF & 1 << 1;
+      buttons[1] = PORTD & 1 << 5;
+      buttons[2] = PORTD & 1 << 6;
+      buttons[3] = PORTD & 1 << 7;
+      switches[0] = PORTD & 1 << 8;
+      switches[1] = PORTD & 1 << 9;
+      switches[2] = PORTD & 1 << 10;
+      switches[3] = PORTD & 1 << 11;
+
+      switch(gamestate) {
+        case INTRO:
+          intro_update(buttons, switches); // TODO: Remove or implement
+          intro_draw();
+          break;
+        case MENU:
+          menu_update(buttons, switches);
+          menu_draw();
+          break;
+        case GAME:
+          if(prevgamestate != GAME)
+            game_draw();
+          game_update(buttons, switches);
+          break;
+        case GAME_END:
+          game_end_update(buttons, switches);
+          game_end_draw();
+          break;
+        case HIGHSCORE:
+          highscore_update(buttons, switches);
+          highscore_draw();
+          break;
+        case SETTINGS:
+          settings_update(buttons, switches);
+          settings_draw();
+          break;
+        case HELP:
+          help_update(buttons, switches);
+          help_draw();
+          break;
+        default:
+          break;
+      }
     }
   }
 }

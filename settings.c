@@ -17,7 +17,7 @@ void settings_init(void) {
 }
 
 /* Update program logic */
-void settings_update(void) {
+void settings_update(int* buttons, int* switches) {
 
 }
 

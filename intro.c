@@ -18,7 +18,7 @@ void intro_init(void) {
 }
 
 /* Update program logic */
-void intro_update(void) {
+void intro_update(int* buttons, int* switches) {
 
 }
 
