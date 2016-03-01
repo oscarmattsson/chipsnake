@@ -12,7 +12,7 @@
 
 #define INTRO_TIME 3
 
-state gamestate = GAME_END;
+state gamestate = INTRO;
 state prevgamestate = INTRO;
 
 uint8_t menufield[32][128];
