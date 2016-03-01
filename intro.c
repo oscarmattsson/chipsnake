@@ -11,8 +11,6 @@
 #include "chipsnake.h"  /* Declatations for game */
 #include "i2c-defs.h" /* Declarations of I2C-specific addresses */
 
-#define CENTER 128 / 2
-
 /* Initialize intro logic */
 void intro_init(void) {
 
@@ -31,7 +29,7 @@ void intro_update(int* buttons, int* switches) {
   insert_string(CENTER - (sizeof("Right")*6) / 2, 19, "Right", menufield, 1);
   int x = CENTER - (sizeof("Switch")*6) / 2 - 6;
   x += insert_string(x, 25, "Switch", menufield, 1);
-  insert_object(x, 25, 5, 5, arrow_up, menufield, 1);
+  insert_object(x, 25, 5, 5, switch_up, menufield, 1);
 }
 
 /* Draw game */

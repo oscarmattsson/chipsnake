@@ -15,12 +15,7 @@
 void highscore_init(void) {
 
   // Clear screen
-  int x, y;
-  for(y = 0; y < 32; y++) {
-    for(x = 0; x < 128; x++) {
-      menufield[y][x] = 0;
-    }
-  }
+  insert_square(0, 0, 32, 128, 0, menufield);
 
   // Set top and bottom bars
   insert_square(0, 0, 7, 128, 1, menufield);
@@ -31,9 +26,9 @@ void highscore_init(void) {
   insert_string(71, 25, "sel", menufield, 0);
   insert_string(100, 25, "back", menufield, 0);
   //insert_string(97, 1, "play", menufield, 0);
-  //insert_object(122, 1, 5, 5, arrow_down, menufield, 0);
-  insert_object(3, 13, 5, 3, arrow_left, menufield, 1);
-  insert_object(124, 13, 5, 3, arrow_right, menufield, 1);
+  //insert_object(122, 1, 5, 5, switch_down, menufield, 0);
+  insert_object(3, 13, 5, 3, button_left, menufield, 1);
+  insert_object(124, 13, 5, 3, button_right, menufield, 1);
 
 }
 

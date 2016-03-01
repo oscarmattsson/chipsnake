@@ -317,7 +317,7 @@ const uint8_t const letters[27][25] = {
 	},
 };
 
-const uint8_t const arrow_up[25] = {
+const uint8_t const switch_up[25] = {
 	1, 1, 0, 1, 1,
 	1, 0, 0, 0, 1,
 	0, 1, 0, 1, 0,
@@ -325,7 +325,7 @@ const uint8_t const arrow_up[25] = {
 	1, 1, 0, 1, 1,
 };
 
-const uint8_t const arrow_down[25] = {
+const uint8_t const switch_down[25] = {
 	1, 1, 0, 1, 1,
 	1, 1, 0, 1, 1,
 	0, 1, 0, 1, 0,
@@ -333,7 +333,7 @@ const uint8_t const arrow_down[25] = {
 	1, 1, 0, 1, 1,
 };
 
-const uint8_t const arrow_left[15] = {
+const uint8_t const button_left[15] = {
 	1, 1, 0,
 	1, 0, 0,
 	0, 0, 0,
@@ -341,12 +341,24 @@ const uint8_t const arrow_left[15] = {
 	1, 1, 0,
 };
 
-const uint8_t const arrow_right[15] = {
+const uint8_t const button_right[15] = {
 	0, 1, 1,
 	0, 0, 1,
 	0, 0, 0,
 	0, 0, 1,
 	0, 1, 1,
+};
+
+const uint8_t const button_up[15] = {
+	1, 1, 0, 1, 1,
+	1, 0, 0, 0, 1,
+	0, 0, 0, 0, 0,
+};
+
+const uint8_t const button_down[15] = {
+	0, 0, 0, 0, 0,
+	1, 0, 0, 0, 1,
+	1, 1, 0, 1, 1,
 };
 
 const uint8_t const food_regular[9] = {

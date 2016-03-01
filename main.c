@@ -12,7 +12,7 @@
 
 #define INTRO_TIME 3
 
-state gamestate = INTRO;
+state gamestate = GAME_END;
 state prevgamestate = INTRO;
 
 uint8_t menufield[32][128];
@@ -51,7 +51,6 @@ void update(void) {
       game_update(buttons, switches);
       break;
     case GAME_END:
-      game_end_init();
       game_end_update(buttons, switches);
       game_end_draw();
       break;
@@ -164,6 +163,7 @@ int main(void) {
   /* Program initialization */
   game_init();
   intro_init();
+  game_end_init(0);
 
   update();
 

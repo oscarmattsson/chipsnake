@@ -20,12 +20,7 @@ int confirmbox = 0;
 void menu_init(void) {
 
   // Clear screen
-  int x, y;
-  for(y = 0; y < 32; y++) {
-    for(x = 0; x < 128; x++) {
-      menufield[y][x] = 0;
-    }
-  }
+  insert_square(0, 0, 32, 128, 0, menufield);
 
   // Set top and bottom bars
   insert_square(0, 0, 7, 128, 1, menufield);
@@ -36,9 +31,9 @@ void menu_init(void) {
   insert_string(71, 25, "sel", menufield, 0);
   //insert_string(100, 25, "back", menufield, 0);
   insert_string(97, 1, "play", menufield, 0);
-  insert_object(122, 1, 5, 5, arrow_down, menufield, 0);
-  insert_object(3, 13, 5, 3, arrow_left, menufield, 1);
-  insert_object(124, 13, 5, 3, arrow_right, menufield, 1);
+  insert_object(122, 1, 5, 5, switch_down, menufield, 0);
+  insert_object(3, 13, 5, 3, button_left, menufield, 1);
+  insert_object(124, 13, 5, 3, button_right, menufield, 1);
 
 }
 
@@ -75,11 +70,9 @@ void menu_update(int* buttons, int* switches) {
 /* Draw game */
 void menu_draw(void) {
 
-  int center = 128 / 2;
-
   if(confirmbox) {
     insert_square(0, 7, 17, 128, 0, menufield);
-    insert_string(center - (sizeof("Are you sure")*6) / 2, 13, "Are you sure", menufield, 1);
+    insert_string(CENTER - (sizeof("Are you sure")*6) / 2, 13, "Are you sure", menufield, 1);
     insert_square(0, 24, 7, 128, 1, menufield);
     insert_string(39, 25, "YES", menufield, 0);
     insert_string(74, 25, "NO", menufield, 0);
@@ -88,16 +81,16 @@ void menu_draw(void) {
     insert_square(7, 7, 17, 116, 0, menufield);
     switch(menuselection) {
       case 0:
-        insert_string(center - (sizeof("Highscore")*6) / 2, 13, "Highscore", menufield, 1);
+        insert_string(CENTER - (sizeof("Highscore")*6) / 2, 13, "Highscore", menufield, 1);
         break;
       case 1:
-        insert_string(center - (sizeof("Settings")*6) / 2, 13, "Settings", menufield, 1);
+        insert_string(CENTER - (sizeof("Settings")*6) / 2, 13, "Settings", menufield, 1);
         break;
       case 2:
-        insert_string(center - (sizeof("Help")*6) / 2, 13, "Help", menufield, 1);
+        insert_string(CENTER - (sizeof("Help")*6) / 2, 13, "Help", menufield, 1);
         break;
       case 3:
-        insert_string(center - (sizeof("Restart Game")*6) / 2, 13, "Restart Game", menufield, 1);
+        insert_string(CENTER - (sizeof("Restart Game")*6) / 2, 13, "Restart Game", menufield, 1);
     }
   }
   display_full_bin(menufield);
