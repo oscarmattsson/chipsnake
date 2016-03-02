@@ -1,19 +1,23 @@
 /* basemain.c
 
-   This file written 2015 by Axel Isaksson,
-   modified 2015 by F Lundevall
-   modified 2016 by Oscar Mattsson
+   This file written 2016 by Oscar Mattsson
+   Some original code written 2015 by Axel Isaksson and F Lundevall
 
    For copyright and licensing, see file COPYING */
 
 #include <stdint.h>   /* Declarations of uint_32 and the like */
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "chipsnake.h"  /* Declatations for game */
+#include "i2c-defs.h"
 
 #define INTRO_TIME 3
 
 state gamestate = INTRO;
 state prevgamestate = INTRO;
+
+int mifinterrupt = 0;
+int sifinterrupt = 0;
+int bifinterrupt = 0;
 
 uint8_t menufield[32][128];
 
@@ -27,6 +31,12 @@ int switches[4] = { 0, 0, 0, 0 };
 void update(void) {
   state tempgamestate = gamestate;
   switch(gamestate) {
+    case TEST:
+      if(!switches[1])
+        gamestate = MENU;
+      test_update(buttons, switches);
+      test_draw();
+      break;
     case INTRO:
       if(introcount >= INTRO_TIME) {
         if(switches[0])
@@ -39,6 +49,8 @@ void update(void) {
     case MENU:
       if(!switches[0])
         gamestate = GAME;
+      if(switches[1])
+        gamestate = TEST;
       menu_init();
       menu_update(buttons, switches);
       menu_draw();
@@ -77,6 +89,7 @@ void update(void) {
 
 /* Interrupt Service Routine */
 void user_isr(void) {
+
   if(IFS(0) & (1 << 8)) {
     timeoutcount++;
     IFSCLR(0) = (1 << 8);
@@ -84,6 +97,11 @@ void user_isr(void) {
 
   if(timeoutcount >= 10) {
     timeoutcount = 0;
+
+    if(gamestate == TEST) {
+      test_draw();
+    }
+
     if(gamestate == INTRO) {
       if(introcount < INTRO_TIME)
         introcount++;
@@ -94,6 +112,20 @@ void user_isr(void) {
       //game_move();
       game_draw();
     }
+  }
+
+  /* Handle I2C interrupts */
+  if(IFS(0) & (1 << 31)) {
+    mifinterrupt = 1;
+    IFSCLR(0) = 1 << 31;
+  }
+  if(IFS(0) & (1 << 30)) {
+    sifinterrupt = 1;
+    IFSCLR(0) = 1 << 30;
+  }
+  if(IFS(0) & (1 << 29)) {
+    bifinterrupt = 1;
+    IFSCLR(0) = 1 << 29;
   }
 }
 
@@ -151,6 +183,10 @@ int main(void) {
   IECSET(0) = (1 << 8);         // Enable interrupts for timer 2
 
   /* Initialize I2C */
+  I2C1CON = 0x0;            // Clear control register
+	I2C1BRG = 0x0C2;          // Set Baud Generator Divisor
+	I2C1STAT = 0x0;           // Clear status register
+	I2C1CONSET = 1 << 13;     // SIDL = 1
   IPCSET(6) = 0x1B00;       // Set priority 6 and subpriority 3
   IFSCLR(0) = 0xE0000000;   // Clear interrupt flags for I2C1MIF, I2C1SIF and I2CBIF
   IECSET(0) = 0xE0000000;   // Enable interrupts for I2C1MIF, I2C1SIF and I2CBIF
@@ -163,7 +199,9 @@ int main(void) {
   /* Program initialization */
   game_init();
   intro_init();
-  game_end_init(0);
+
+  if(gamestate == TEST)
+    test_init();
 
   update();
 
