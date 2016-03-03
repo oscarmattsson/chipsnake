@@ -18,11 +18,10 @@ void game_end_init(void) {
 
 /* Update program logic */
 void game_end_update(int* buttons, int* switches) {
-
+  if(buttons[0])
+    gamestate = MENU;
 }
 
 /* Draw game */
 void game_end_draw(void) {
-  display_string(1, "Game End Screen");
-  display_update();
 }

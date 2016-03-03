@@ -6,13 +6,16 @@
 
    For copyright and licensing, see file COPYING */
 
+/* Declare gamestate variables */
+typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP } state;
+extern state gamestate;
+
+/* Declare menu screens array */
+extern uint8_t menufield[32][128];
+
 /* Declare functions from func.c */
-void display_image(int x, const uint8_t *data);
-void display_image_r(int x, const uint8_t *data);
 void display_full(const uint8_t *data);
 void display_init(void);
-void display_string(int line, char *s);
-void display_update(void);
 uint8_t spi_send_recv(uint8_t data);
 char * itoaconv(int num);
 void quicksleep(int cyc);
@@ -57,46 +60,25 @@ void settings_init(void);
 void settings_update(int* buttons, int* switches);
 void settings_draw(void);
 
-/* Declare display_debug - a function to help debugging.
-
-   After calling display_debug,
-   the two middle lines of the display show
-   an address and its current contents.
-
-   There's one parameter: the address to read and display.
-
-   Note: When you use this function, you should comment out any
-   repeated calls to display_image; display_image overwrites
-   about half of the digits shown by display_debug.
-*/
-void display_debug( volatile int * const addr );
-
-/* Declare bitmap array containing font */
-extern const uint8_t const font[128*8];
-/* Declare text buffer for display output */
-extern char textbuffer[4][16];
-/* Declare bitmap array containing snake */
+/* Declare bitmap array containing game background */
 extern const uint8_t const game_background[128*32];
 /* Declare bitmap array containing numbers */
 extern const uint8_t const numbers[11][15];
 /* Declare bitmap array containing small font */
 extern const uint8_t const letters[27][25];
+/* Declare bitmap arrays for intro graphics */
+extern const uint8_t const intro_snake[480];
+extern const uint8_t const intro_mouse[560];
 /* Declare bitmap arrays containing directional arrows */
 extern const uint8_t const arrow_up[25];
 extern const uint8_t const arrow_down[25];
 extern const uint8_t const arrow_left[15];
 extern const uint8_t const arrow_right[15];
 /* Declare bitmap arrays containing game food items */
-extern const uint8_t const food_regular[4];
+extern const uint8_t const food_regular[9];
 extern const uint8_t const food_lizard[21];
 extern const uint8_t const food_mouse[21];
 extern const uint8_t const food_bird[30];
 extern const uint8_t const food_spider[32];
 extern const uint8_t const food_frog[32];
 extern const uint8_t const food_turtle[32];
-
-/* Freeze the program for a set amount of milliseconds */
-void delay(int);
-/* Written as part of i/o lab: getbtns, getsw */
-int getbtns(void);
-int getsw(void);
