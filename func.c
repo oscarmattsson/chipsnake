@@ -163,7 +163,30 @@ int insert_char(int x, int y, char c, uint8_t dest[32][128], int reverse) {
 				insert_object(x, y, 5, 5, letters[c], dest, reverse);
 			}
 		}
-		else {
+		else if(c == 33) { // !
+			insert_square(x, y, 3, 1, reverse, dest);
+			insert_square(x + 4, y, 1, 1, reverse, dest);
+		}
+		else if(c == 42) { // * (mult sign)
+			insert_object(x + 1, y + 1, 3, 3, symbol_mult, dest, reverse);
+		}
+		else if(c == 45) { // -
+			insert_square(x + 1, y + 2, 1, 3, reverse, dest);
+		}
+		else if(c == 46) { // .
+			insert_square(x, y + 4, 1, 1, reverse, dest);
+		}
+		else if(c == 47) { // /
+			insert_object(x, y, 5, 5, symbol_slash, dest, reverse);
+		}
+		else if(c == 58) { // :
+			insert_square(x, y + 1, 1, 1, reverse, dest);
+			insert_square(x, y + 3, 1, 1, reverse, dest);
+		}
+		else if(c == 63) { // ?
+			insert_object(x, y, 5, 5, symbol_questionmark, dest, reverse);
+		}
+		else{
 			insert_object(x, y, 5, 5, letters[0], dest, reverse);
 		}
 	}

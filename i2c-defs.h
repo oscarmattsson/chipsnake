@@ -129,6 +129,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #endif
 
+#define EEPROM_WRITE 0xA0 // 1010 000 (0)
+#define EEPROM_READ 0xA1  // 1010 000 (1)
+#define EEPROM_MEM_ADD 0x0000
+
+#define HIGHSCORE_ENTRIES 10
+#define HIGHSCORE_LENGTH 8
+
 void i2c_idle();
 int i2c_send(uint8_t data);
 uint8_t i2c_recv();
