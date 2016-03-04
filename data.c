@@ -1,7 +1,6 @@
 /** data.c
  *
- * Contains original code by F Lundevall and Axel Isaksson
- * Modified 2016 by Oscar Mattsson
+ * Written 2016 by Oscar Mattsson
  *
  * For copyright and licensing, see file COPYING
  */
@@ -317,7 +316,7 @@ const uint8_t const letters[27][25] = {
 	},
 };
 
-const uint8_t const arrow_up[25] = {
+const uint8_t const switch_up[25] = {
 	1, 1, 0, 1, 1,
 	1, 0, 0, 0, 1,
 	0, 1, 0, 1, 0,
@@ -325,7 +324,7 @@ const uint8_t const arrow_up[25] = {
 	1, 1, 0, 1, 1,
 };
 
-const uint8_t const arrow_down[25] = {
+const uint8_t const switch_down[25] = {
 	1, 1, 0, 1, 1,
 	1, 1, 0, 1, 1,
 	0, 1, 0, 1, 0,
@@ -333,7 +332,7 @@ const uint8_t const arrow_down[25] = {
 	1, 1, 0, 1, 1,
 };
 
-const uint8_t const arrow_left[15] = {
+const uint8_t const button_left[15] = {
 	1, 1, 0,
 	1, 0, 0,
 	0, 0, 0,
@@ -341,12 +340,24 @@ const uint8_t const arrow_left[15] = {
 	1, 1, 0,
 };
 
-const uint8_t const arrow_right[15] = {
+const uint8_t const button_right[15] = {
 	0, 1, 1,
 	0, 0, 1,
 	0, 0, 0,
 	0, 0, 1,
 	0, 1, 1,
+};
+
+const uint8_t const button_up[15] = {
+	1, 1, 0, 1, 1,
+	1, 0, 0, 0, 1,
+	0, 0, 0, 0, 0,
+};
+
+const uint8_t const button_down[15] = {
+	0, 0, 0, 0, 0,
+	1, 0, 0, 0, 1,
+	1, 1, 0, 1, 1,
 };
 
 const uint8_t const food_regular[9] = {
@@ -356,44 +367,44 @@ const uint8_t const food_regular[9] = {
 };
 
 const uint8_t const food_lizard[21] = {
-	0, 0, 0, 7, 0, 7, 0,
-	7, 7, 7, 7, 7, 7, 7,
-	0, 0, 0, 7, 0, 7, 0,
+	0, 0, 0, 6, 0, 6, 0,
+	6, 6, 6, 6, 6, 6, 6,
+	0, 0, 0, 6, 0, 6, 0,
 };
 
 const uint8_t const food_mouse[21] = {
-	0, 8, 8, 8, 0, 0, 0,
-	8, 0, 8, 8, 8, 8, 8,
-	8, 8, 8, 8, 0, 0, 0,
+	0, 6, 6, 6, 0, 0, 0,
+	6, 0, 6, 6, 6, 6, 6,
+	6, 6, 6, 6, 0, 0, 0,
 };
 
 const uint8_t const food_bird[30] = {
-	9, 0, 0, 9, 9, 0,
-	0, 9, 9, 9, 9, 9,
-	0, 0, 9, 9, 9, 0,
-	0, 0, 0, 9, 0, 0,
-	0, 0, 9, 0, 0, 0,
+	6, 0, 0, 6, 6, 0,
+	0, 6, 6, 6, 6, 6,
+	0, 0, 6, 6, 6, 0,
+	0, 0, 0, 6, 0, 0,
+	0, 0, 6, 0, 0, 0,
 };
 
 const uint8_t const food_spider[32] = {
-	0, 0, 10, 10, 10, 10, 0, 0,
-	10, 10, 10, 10, 10, 10, 10, 10,
-	10, 0, 10, 10, 10, 10, 0, 10,
-	10, 0, 10, 0, 0, 10, 0, 10,
+	0, 0, 6, 6, 6, 6, 0, 0,
+	6, 6, 6, 6, 6, 6, 6, 6,
+	6, 0, 6, 6, 6, 6, 0, 6,
+	6, 0, 6, 0, 0, 6, 0, 6,
 };
 
 const uint8_t const food_frog[32] = {
-	0, 0, 1, 1, 1, 1, 0, 0,
-	0, 1, 0, 1, 1, 0, 1, 0,
-	0, 1, 1, 1, 1, 1, 1, 0,
-	1, 1, 0, 0, 0, 0, 1, 1,
+	0, 0, 6, 6, 6, 6, 0, 0,
+	0, 6, 0, 6, 6, 0, 6, 0,
+	0, 6, 6, 6, 6, 6, 6, 0,
+	6, 6, 0, 0, 0, 0, 6, 6,
 };
 
 const uint8_t const food_turtle[32] = {
-	1, 1, 0, 0, 0, 1, 0, 0,
-	1, 1, 0, 0, 1, 1, 1, 0,
-	0, 0, 1, 1, 1, 1, 1, 1,
-	0, 0, 0, 0, 1, 0, 1, 0,
+	6, 6, 0, 0, 0, 6, 0, 0,
+	6, 6, 0, 0, 6, 6, 6, 0,
+	0, 0, 6, 6, 6, 6, 6, 6,
+	0, 0, 0, 0, 6, 0, 6, 0,
 };
 
 const uint8_t const intro_snake[] = {
@@ -444,4 +455,26 @@ const uint8_t const intro_mouse[] = {
 	1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+};
+
+const uint8_t const symbol_questionmark[25] = {
+  1, 0, 0, 0, 1,
+  0, 1, 1, 1, 0,
+  1, 1, 0, 0, 1,
+  1, 1, 1, 1, 1,
+  1, 1, 0, 1, 1,
+};
+
+const uint8_t const symbol_slash[25] = {
+  1, 1, 1, 1, 0,
+	1, 1, 1, 0, 1,
+	1, 1, 0, 1, 1,
+	1, 0, 1, 1, 1,
+	0, 1, 1, 1, 1,
+};
+
+const uint8_t const symbol_mult[9] = {
+	0, 1, 0,
+	1, 0, 1,
+	0, 1, 0,
 };

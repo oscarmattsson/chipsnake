@@ -1,14 +1,21 @@
 /* basedecl.h
    Header file for all labs.
-   This file written 2015 by F Lundevall
-   Some parts are original code written by Axel Isaksson
-   Modified 2016 by Oscar Mattsson
+   This file written 2016 by Oscar Mattsson
+   Some parts are original code written by Axel Isaksson and F Lundevall
 
    For copyright and licensing, see file COPYING */
 
+#define CENTER 128 / 2
+
 /* Declare gamestate variables */
-typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP } state;
+typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP, TEST } state;
 extern state gamestate;
+extern state prevgamestate;
+
+/* Declare variables for I2C interrupts */
+extern int mifinterrupt;
+extern int sifinterrupt;
+extern int bifinterrupt;
 
 /* Declare menu screens array */
 extern uint8_t menufield[32][128];
@@ -46,7 +53,7 @@ void highscore_update(int* buttons, int* switches);
 void highscore_draw(void);
 
 /* Declare functions from game_end.c */
-void game_end_init(void);
+void game_end_init(int score);
 void game_end_update(int* buttons, int* switches);
 void game_end_draw(void);
 
@@ -66,14 +73,19 @@ extern const uint8_t const game_background[128*32];
 extern const uint8_t const numbers[11][15];
 /* Declare bitmap array containing small font */
 extern const uint8_t const letters[27][25];
+extern const uint8_t const symbol_questionmark[25];
+extern const uint8_t const symbol_slash[25];
+extern const uint8_t const symbol_mult[9];
 /* Declare bitmap arrays for intro graphics */
 extern const uint8_t const intro_snake[480];
 extern const uint8_t const intro_mouse[560];
 /* Declare bitmap arrays containing directional arrows */
-extern const uint8_t const arrow_up[25];
-extern const uint8_t const arrow_down[25];
-extern const uint8_t const arrow_left[15];
-extern const uint8_t const arrow_right[15];
+extern const uint8_t const switch_up[25];
+extern const uint8_t const switch_down[25];
+extern const uint8_t const button_left[15];
+extern const uint8_t const button_right[15];
+extern const uint8_t const button_up[15];
+extern const uint8_t const button_down[15];
 /* Declare bitmap arrays containing game food items */
 extern const uint8_t const food_regular[9];
 extern const uint8_t const food_lizard[21];
