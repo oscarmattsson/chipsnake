@@ -12,8 +12,8 @@
 #include "i2c-defs.h" /* Declarations of I2C-specific addresses */
 
 char end_score[6];
-int charpos = 0;
 char name[4];
+int charpos = 0;
 
 char names[11][4];
 int scores[11];
@@ -44,6 +44,7 @@ void game_end_init(int points) {
   tpoints = tpoints / 10;
   end_score[0] = (tpoints % 10) + 48;
 
+  // Set new score as top score
   scores[0] = points;
 
   int i;
@@ -72,7 +73,7 @@ void game_end_init(int points) {
     scores[i] += (i2c_recv() - 48);
     i2c_stop();
 
-    // Figure out high score position
+    // Decrement new score position if less than existing score
     if(points <= scores[i]) {
       scores[position] = scores[i];
       scores[i] = points;
@@ -89,6 +90,7 @@ void game_end_init(int points) {
   else
     insert_string(54, 13, end_score, menufield, 1);
   insert_num(1, 13, scores[1], menufield, 1);
+  insert_num(1, 19, points, menufield, 1);
 
 
   // Set bottom bar

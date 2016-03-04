@@ -25,10 +25,7 @@ void highscore_init(void) {
   insert_string(1, 1, "highscore", menufield, 0);
   insert_string(4, 25, "left", menufield, 0);
   insert_string(33, 25, "right", menufield, 0);
-  //insert_string(71, 25, "sel", menufield, 0);
   insert_string(100, 25, "back", menufield, 0);
-  //insert_string(97, 1, "play", menufield, 0);
-  //insert_object(122, 1, 5, 5, switch_down, menufield, 0);
   insert_object(3, 13, 5, 3, button_left, menufield, 1);
   insert_object(124, 13, 5, 3, button_right, menufield, 1);
 
