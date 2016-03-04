@@ -122,7 +122,7 @@ void user_isr(void) {
         update();
     }
     else if(gamestate == GAME) {
-  //    game_move();
+      game_move();
       game_draw();
     }
   }
