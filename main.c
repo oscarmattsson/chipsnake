@@ -14,6 +14,7 @@
 
 state gamestate = INTRO;
 state prevgamestate = INTRO;
+int speed = 1;
 
 int mifinterrupt = 0;
 int sifinterrupt = 0;
@@ -108,7 +109,7 @@ void user_isr(void) {
     IFSCLR(0) = (1 << 8);
   }
 
-  if(timeoutcount >= 10) {
+  if(timeoutcount >= 10 - speed) {
     timeoutcount = 0;
 
     if(gamestate == TEST) {
@@ -122,7 +123,9 @@ void user_isr(void) {
         update();
     }
     else if(gamestate == GAME) {
-      game_move();
+      if(!switches[3]) {
+        while(!game_move());
+      }
       game_draw();
     }
   }

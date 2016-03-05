@@ -11,10 +11,10 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "chipsnake.h"  /* Declatations for game */
 
-#define GAMEFIELD_LEFT 1
-#define GAMEFIELD_TOP 1
-#define GAMEFIELD_WIDTH 126
-#define GAMEFIELD_HEIGHT 24
+#define GAMEFIELD_LEFT 0
+#define GAMEFIELD_TOP 0
+#define GAMEFIELD_WIDTH 128
+#define GAMEFIELD_HEIGHT 25
 
 #define FOOD_REGULAR_WIDTH 3
 #define FOOD_REGULAR_HEIGHT 3
@@ -51,6 +51,8 @@ int food[2][5];
 //int collide = {0, 0};
 int score;
 
+int debug = 0;
+
 void draw_head(int x, int y, int dir, int flip) {
 
   int xr = x + 1 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT : x + 1;
@@ -60,9 +62,12 @@ void draw_head(int x, int y, int dir, int flip) {
     int yu = y - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : y - 1;
 
     // Fill head
-    insert_square(x, yu, 1, 2, dir, gamefield);
-    insert_square(x, y, 1, 2, dir, gamefield);
-    insert_square(x, yd, 1, 2, dir, gamefield);
+    insert_square(x, yu, 1, 1, dir, gamefield);
+    insert_square(xr, yu, 1, 1, dir, gamefield);
+    insert_square(x, y, 1, 1, dir, gamefield);
+    insert_square(xr, y, 1, 1, dir, gamefield);
+    insert_square(x, yd, 1, 1, dir, gamefield);
+    insert_square(xr, yd, 1, 1, dir, gamefield);
 
     // Remove odd bit
     if(dir == 2) { // Up
@@ -83,9 +88,12 @@ void draw_head(int x, int y, int dir, int flip) {
     int xl = x - 1 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : x - 1;
 
     // Fill head
-    insert_square(xl, y, 2, 1, dir, gamefield);
-    insert_square(x, y, 2, 1, dir, gamefield);
-    insert_square(xr, y, 2, 1, dir, gamefield);
+    insert_square(xl, y, 1, 1, dir, gamefield);
+    insert_square(xl, yd, 1, 1, dir, gamefield);
+    insert_square(x, y, 1, 1, dir, gamefield);
+    insert_square(x, yd, 1, 1, dir, gamefield);
+    insert_square(xr, y, 1, 1, dir, gamefield);
+    insert_square(xr, yd, 1, 1, dir, gamefield);
 
     // Remove odd bit
     if(dir == 3) { // Right
@@ -118,8 +126,10 @@ void game_init(void) {    // ändra loopen
   snake[6] = 3;   // head previous direction
   snake[7] = 3;   // tail previous direction
 
+  // Draw head
   draw_head(snake[0], snake[1], snake[2], 0);
 
+  // Draw body
   int i;
   for(i = 1; i < 7; i++){
     insert_square(snake[0] - i*3, snake[1], 1, 2, snake[2], gamefield);
@@ -129,7 +139,11 @@ void game_init(void) {    // ändra loopen
   //  food[0] = {45, 22, 3, 3, 6};
   //  food[1] = {0, 0, 0, 0, 0};
 
+  // Reset score
   score = 0;
+
+  // Draw score
+  insert_num(23, 26, score, gamefield, 0);
 
 /*
     insert_object(1, 12 - (FOOD_REGULAR_HEIGHT / 2),
@@ -161,29 +175,52 @@ void game_update(int* buttons, int* switches) {
 
   if(prevgamestate == GAME) {
     if(buttons[0]){
-      if(snake[2] != 5)     // Don't turn in opposite direction
+      if(snake[6] != 5)     // Don't turn in opposite direction
         snake[2] = 2;       // Turn up
     }
     if(buttons[1]){
-      if(snake[2] != 4)     // Don't turn in opposite direction
+      if(snake[6] != 4)     // Don't turn in opposite direction
         snake[2] = 3;       // Turn right
     }
     if(buttons[2]){
-      if(snake[2] != 3)     // Don't turn in opposite direction
+      if(snake[6] != 3)     // Don't turn in opposite direction
         snake[2] = 4;       // Turn left
     }
     if(buttons[3]){
-      if(snake[2] != 2)     // Don't turn in opposite direction
+      if(snake[6] != 2)     // Don't turn in opposite direction
         snake[2] = 5;       // Turn down
     }
   }
+  if(switches[1])
+    debug = 1;
+  else
+    debug = 0;
 }
 
 
 // The snake moves forward
-void game_move(void){
+int game_move(void){
   int fliphead = 0, collision = 0;
-  int ty = snake[1] - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : snake[1] - 1;
+
+  int x = snake[0];
+  int y = snake[1];
+
+  // Variables for safely crossing edge of screen with head
+  int xl1 = x - 1 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : x - 1;
+  int xl2 = xl1 - 1 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : xl1 - 1;
+  int xl3 = xl2 - 1 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : xl2 - 1;
+
+  int xr1 = x + 1 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT : x + 1;
+  int xr2 = xr1 + 1 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT : xr1 + 1;
+  int xr3 = xr2 + 1 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT : xr2 + 1;
+
+  int yu1 = y - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : y - 1;
+  int yu2 = yu1 - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : yu1 - 1;
+  int yu3 = yu2 - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : yu2 - 1;
+
+  int yd1 = y + 1 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : y + 1;
+  int yd2 = yd1 + 1 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : yd1 + 1;
+  int yd3 = yd2 + 1 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : yd2 + 1;
 
   // Update direction bit
   insert_square(snake[0], snake[1], 1, 1, snake[2], gamefield);
@@ -194,179 +231,211 @@ void game_move(void){
       if(snake[6] != snake[2]) {
         if(snake[6] == 3) { // Previously right
           // Remove head bit
-          insert_square(snake[0] + 1, snake[1], 1, 1, 0, gamefield);
+          insert_square(xr1, y, 1, 1, 0, gamefield);
 
           // Update position
-          snake[0] = snake[0] + 1;
-          snake[1] = snake[1] - 1;
+          snake[0] = xr1 > xr2 ? xr2 : xr1;
+          snake[1] = yu1;
         }
         else if(snake[6] == 4) { // Previously left
           // Remove head bit
-          insert_square(snake[0] - 1, snake[1], 1, 1, 0, gamefield);
+          insert_square(xl1, y, 1, 1, 0, gamefield);
 
           // Update position
-          snake[0] = snake[0] - 2 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : snake[0] - 2;
-          snake[1] = snake[1] - 1;
+          snake[0] = xl2 > xl1 ? xl3 : xl2;
+          snake[1] = yu1;
           fliphead = 1;
         }
       }
       else {
         // Remove head bit
-        insert_square(snake[0] + 1, ty, 1, 1, 0, gamefield);
+        insert_square(xr1, yu1, 1, 1, 0, gamefield);
 
         // Update position
-        snake[1] = snake[1] - 3 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 2 : snake[1] - 3;
+        snake[1] = yu3;
       }
       break;
     case 3: // Right
       if(snake[6] != snake[2]) {
         if(snake[6] == 2) { // Previously up
           // Remove head bit
-          insert_square(snake[0] + 1, ty, 1, 1, 0, gamefield);
+          insert_square(xr1, yu1, 1, 1, 0, gamefield);
 
           // Update position
-          snake[0] = snake[0] + 2 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT + 1 : snake[0] + 2;
-          snake[1] = snake[1] - 2 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 2 : snake[1] - 2;
+          snake[0] = xr2;
+          snake[1] = yu2 > yu1 ? yu3 : yu2;
           fliphead = 1;
         }
         else if(snake[6] == 5) { // Previously down
           // Remove head bit
-          insert_square(snake[0] + 1, snake[1] + 1, 1, 1, 0, gamefield);
+          insert_square(xr1, yd1, 1, 1, 0, gamefield);
 
           // Update position
-          snake[0] = snake[0] + 2 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT + 1 : snake[0] + 2;
-          snake[1] = snake[1] + 1;
+          snake[0] = xr2;
+          snake[1] = yd1 > yd2 ? yd2 : yd1;
         }
       }
       else {
         // Remove head bit
-        insert_square(snake[0] + 1, snake[1] + 1, 1, 1, 0, gamefield);
+        insert_square(xr1, yd1, 1, 1, 0, gamefield);
 
         // Update position
-        snake[0] = snake[0] + 3 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT + 1: snake[0] + 3;
+        snake[0] = xr3;
       }
       break;
     case 4: // Left
       if(snake[6] != snake[2]) {
         if(snake[6] == 2) { // Previously up
           // Remove head bit
-          insert_square(snake[0], ty, 1, 1, 0, gamefield);
+          insert_square(x, yu1, 1, 1, 0, gamefield);
 
           // Update position
-          snake[0] = snake[0] - 1;
-          snake[1] = snake[1] - 2 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 2 : snake[1] - 2;
+          snake[0] = xl1;
+          snake[1] = yu2 > yu1 ? yu3 : yu2;
           fliphead = 1;
         }
         else if(snake[6] == 5) {  // Previously down
           // Remove head bit
-          insert_square(snake[0], snake[1] + 1, 1, 1, 0, gamefield);
+          insert_square(x, yd1, 1, 1, 0, gamefield);
 
           // Update position
-          snake[0] = snake[0] - 1;
-          snake[1] = snake[1] + 1;
+          snake[0] = xl1;
+          snake[1] = yd1 > yd2 ? yd2 : yd1;
         }
       }
       else {
         // Remove head bit
-        insert_square(snake[0] - 1, snake[1] + 1, 1, 1, 0, gamefield);
+        insert_square(xl1, yd1, 1, 1, 0, gamefield);
 
         // Update position
-        snake[0] = snake[0] - 3 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 2: snake[0] - 3;
+        snake[0] = xl3;
       }
       break;
     case 5: // Down
       if(snake[6] != snake[2]) {
         if(snake[6] == 3) { // Previously right
           // Remove head bit
-          insert_square(snake[0] + 1, snake[1] + 1, 1, 1, 0, gamefield);
+          insert_square(xr1, yd1, 1, 1, 0, gamefield);
 
           // Update position
-          snake[0] = snake[0] + 1;
-          snake[1] = snake[1] + 2 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : snake[1] + 2;
+          snake[0] = xr1 > xr2 ? xr2 : xr1;
+          snake[1] = yd2;
         }
         if(snake[6] == 4) { // Previously left
           // Remove head bit
-          insert_square(snake[0] - 1, snake[1] + 1, 1, 1, 0, gamefield);
+          insert_square(xl1, yd1, 1, 1, 0, gamefield);
 
           // Update position
-          snake[0] = snake[0] - 2 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : snake[0] - 2;
-          snake[1] = snake[1] + 2 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : snake[1] + 2;
+          snake[0] = xl2 > xl1 ? xl3 : xl2;
+          snake[1] = yd2;
           fliphead = 1;
         }
       }
       else {
         // Remove head bit
-        insert_square(snake[0] + 1, snake[1] + 1, 1, 1, 0, gamefield);
+        insert_square(xr1, yd1, 1, 1, 0, gamefield);
 
         // Update position
-        snake[1] = snake[1] + 3 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP + 1 : snake[1] + 3;
+        snake[1] = yd3;
       }
       break;
   }
 
   if(!collision) {
-    int next = gamefield[snake[4]][snake[3]];
-    int yu = snake[4] - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : snake[4] - 1;
+
+    x = snake[3];
+    y = snake[4];
+
+    // Variables for safely crossing edge of screen with head
+    xl1 = x - 1 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : x - 1;
+    xl2 = xl1 - 1 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : xl1 - 1;
+    xl3 = xl2 - 1 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : xl2 - 1;
+
+    xr1 = x + 1 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT : x + 1;
+    xr2 = xr1 + 1 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT : xr1 + 1;
+    xr3 = xr2 + 1 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT : xr2 + 1;
+
+    yu1 = y - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : y - 1;
+    yu2 = yu1 - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : yu1 - 1;
+    yu3 = yu2 - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : yu2 - 1;
+
+    yd1 = y + 1 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : y + 1;
+    yd2 = yd1 + 1 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : yd1 + 1;
+    yd3 = yd2 + 1 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : yd2 + 1;
+
+    // Save next turn
+    int next = gamefield[y][x];
+
+    // Remove tail
     if(snake[5] == 2 || snake[5] == 5) {
-      insert_square(snake[3], yu, 1, 2, 0, gamefield);
-      insert_square(snake[3], snake[4], 2, 2, 0, gamefield);
+      insert_square(x, yu1, 1, 1, 0, gamefield);
+      insert_square(x, y, 1, 1, 0, gamefield);
+      insert_square(x, yd1, 1, 1, 0, gamefield);
+      insert_square(xr1, yu1, 1, 1, 0, gamefield);
+      insert_square(xr1, y, 1, 1, 0, gamefield);
+      insert_square(xr1, yd1, 1, 1, 0, gamefield);
     }
     else if(snake[5] == 3 || snake[5] == 4) {
-      insert_square(snake[3] - 1, snake[4], 2, 3, 0, gamefield);
+      insert_square(xl1, y, 1, 1, 0, gamefield);
+      insert_square(xl1, yd1, 1, 1, 0, gamefield);
+      insert_square(x, y, 1, 1, 0, gamefield);
+      insert_square(x, yd1, 1, 1, 0, gamefield);
+      insert_square(xr1, y, 1, 1, 0, gamefield);
+      insert_square(xr1, yd1, 1, 1, 0, gamefield);
     }
 
     // Update position of tail
     switch(next) {
       case 2: // Up
         if(snake[5] == 3) { // Previously right
-          snake[3] = snake[3] + 1;
-          snake[4] = snake[4] - 1;
+          snake[3] = xr1 > xr2 ? xr2 : xr1;
+          snake[4] = yu1;
         }
         else if(snake[5] == 4) {  // Previously left
-          snake[3] = snake[3] - 2 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : snake[3] - 2;
-          snake[4] = snake[4] - 1;
+          snake[3] = xl2 > xl1 ? xl3 : xl2;
+          snake[4] = yu1;
         }
         else {  // Previously up
-          snake[4] = snake[4] - 3 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 2 : snake[4] - 3;
+          snake[4] = yu3;
         }
         break;
       case 3: // Right
         if(snake[5] == 2) { // Previously up
-          snake[3] = snake[3] + 2 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT + 1 : snake[3] + 2;
-          snake[4] = snake[4] - 2 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 2 : snake[4] - 2;
+          snake[3] = xr2;
+          snake[4] = yu2 > yu1 ? yu3 : yu2;
         }
         else if(snake[5] == 5) { // Previously down
-          snake[3] = snake[3] + 2 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT + 1 : snake[3] + 2;
-          snake[4] = snake[4] + 1;
+          snake[3] = xr2;
+          snake[4] = yd1 > yd2 ? yd2 : yd1;
         }
         else {  // Previously right
-          snake[3] = snake[3] + 3 >= GAMEFIELD_LEFT + GAMEFIELD_WIDTH ? GAMEFIELD_LEFT + 1: snake[3] + 3;
+          snake[3] = xr3;
         }
         break;
       case 4: // Left
         if(snake[5] == 2) { // Previously up
-          snake[3] = snake[3] - 1;
-          snake[4] = snake[4] - 2 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 2 : snake[4] - 2;
+          snake[3] = xl1;
+          snake[4] = yu2 > yu1 ? yu3 : yu2;
         }
         else if(snake[5] == 5) { // Previously down
-          snake[3] = snake[3] - 1;
-          snake[4] = snake[4] + 1;
+          snake[3] = xl1;
+          snake[4] = yd1 > yd2 ? yd2 : yd1;
         }
         else {  // Previously left
-          snake[3] = snake[3] - 3 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 2: snake[3] - 3;
+          snake[3] = xl3;
         }
         break;
       case 5: // Down
         if(snake[5] == 3) { // Previously right
-          snake[3] = snake[3] + 1;
-          snake[4] = snake[4] + 2 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : snake[4] + 2;
+          snake[3] = xr1 > xr2 ? xr2 : xr1;
+          snake[4] = yd2;
         }
         else if(snake[5] == 4) { // Previously left
-          snake[3] = snake[3] - 2 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : snake[3] - 2;
-          snake[4] = snake[4] + 2 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP : snake[4] + 2;
+          snake[3] = xl2 > xl1 ? xl3 : xl2;
+          snake[4] = yd2;
         }
         else {  // Previously
-          snake[4] = snake[4] + 3 >= GAMEFIELD_TOP + GAMEFIELD_HEIGHT ? GAMEFIELD_TOP + 1 : snake[4] + 3;
+          snake[4] = yd3;
         }
         break;
     }
@@ -381,6 +450,8 @@ void game_move(void){
 
   // Draw score
   insert_num(23, 26, score, gamefield, 0);
+
+  return 1;
 }
 
 
@@ -425,5 +496,16 @@ void game_collision(collideX, collideY){
 */
 /* Draw game */
 void game_draw(void) {
+    if(debug) {
+      insert_square(0, 25, 7, 128, 1, gamefield);
+      insert_string(1, 26, "x: ", gamefield, 0);
+      insert_num(13, 26, snake[0], gamefield, 0);
+      insert_string(32, 26, "y: ", gamefield, 0);
+      insert_num(44, 26, snake[1], gamefield, 0);
+      insert_string(64, 26, "tx: ", gamefield, 0);
+      insert_num(82, 26, snake[3], gamefield, 0);
+      insert_string(96, 26, "ty: ", gamefield, 0);
+      insert_num(114, 26, snake[4], gamefield, 0);
+    }
     display_full_bin(gamefield);
 }
