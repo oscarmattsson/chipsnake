@@ -38,6 +38,14 @@ void menu_init(void) {
 
 /* Update program logic */
 void menu_update(int* buttons, int* switches) {
+  // If previous state is game, default to restart game
+  if(prevgamestate == GAME)
+    menuselection = 3;
+
+  // If previous state is game_end, default to highscore
+  if(prevgamestate == GAME_END)
+    menuselection = 0;
+
   if(prevgamestate == MENU) {
     if(buttons[3]) // Navigate left
       menuselection = (menuselection == 0 ? NUM_MENU_ITEMS - 1 : menuselection - 1);
