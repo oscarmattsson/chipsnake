@@ -14,18 +14,14 @@
 
 state gamestate = INTRO;
 state prevgamestate = INTRO;
-int speed = 1;
-
-int mifinterrupt = 0;
-int sifinterrupt = 0;
-int bifinterrupt = 0;
+uint8_t speed = 4;
 
 unsigned seed;
 
 uint8_t menufield[32][128];
 
-int timeoutcount = 0;
-int introcount = 0;
+uint8_t timeoutcount = 0;
+uint8_t introcount = 0;
 
 int buttons[4] = { 0, 0, 0, 0 };
 int switches[4] = { 0, 0, 0, 0 };
@@ -34,14 +30,6 @@ int switches[4] = { 0, 0, 0, 0 };
 void update(void) {
   state tempgamestate = gamestate;
   switch(gamestate) {
-    case TEST:
-      if(!switches[1])
-        gamestate = MENU;
-      if(prevgamestate != TEST)
-        test_init();
-      test_update(buttons, switches);
-      test_draw();
-      break;
     case INTRO:
       if(introcount >= INTRO_TIME) {
         if(switches[0])
@@ -54,8 +42,6 @@ void update(void) {
     case MENU:
       if(!switches[0])
         gamestate = GAME;
-      if(switches[1])
-        gamestate = TEST;
       if(prevgamestate != MENU)
         menu_init();
       menu_update(buttons, switches);
@@ -112,10 +98,6 @@ void user_isr(void) {
   if(timeoutcount >= 10 - speed) {
     timeoutcount = 0;
 
-    if(gamestate == TEST) {
-      test_draw();
-    }
-
     if(gamestate == INTRO) {
       if(introcount < INTRO_TIME)
         introcount++;
@@ -124,7 +106,7 @@ void user_isr(void) {
     }
     else if(gamestate == GAME) {
       if(!switches[3]) {
-        while(!game_move());
+        game_move();
       }
       game_draw();
     }
@@ -164,6 +146,10 @@ int main(void) {
 	ODCG = 0x0;
 	TRISFCLR = 0x70;
 	TRISGCLR = 0x200;
+  TRISECLR = 0xFF;
+  uint8_t i;
+  for(i = 0; i < speed; i++)
+    PORTESET = 1 << i;
 
 	/* Set up input pins */
 	TRISFSET = 0x2; // Button 1

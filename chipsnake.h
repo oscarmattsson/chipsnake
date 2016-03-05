@@ -8,14 +8,10 @@
 #define CENTER 128 / 2
 
 /* Declare gamestate variables */
-typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP, TEST } state;
+typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP } state;
 extern state gamestate;
 extern state prevgamestate;
-
-/* Declare variables for I2C interrupts */
-extern int mifinterrupt;
-extern int sifinterrupt;
-extern int bifinterrupt;
+extern uint8_t speed;
 
 /* Declare menu screens array */
 extern uint8_t menufield[32][128];
