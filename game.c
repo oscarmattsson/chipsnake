@@ -1,6 +1,7 @@
 /* game.c
 
-   This file written 2016 by Oscar Mattsson
+   This file written 2016 by Moa Thoren
+   Modified 2016 by Oscar Mattsson
 
    For copyright and licensing, see file COPYING
 
@@ -15,7 +16,7 @@ uint8_t gamefield[32][128];
 uint8_t snake[8];
 
 uint8_t food[2][5];
-//uint8_t collide = {0, 0};
+uint8_t counter;
 int score;
 
 void draw_head(uint8_t x, uint8_t y, uint8_t dir, uint8_t flip) {
@@ -78,8 +79,8 @@ void draw_head(uint8_t x, uint8_t y, uint8_t dir, uint8_t flip) {
 
 void game_generate_position(uint8_t* x, uint8_t* y){
 
-  *x = TMR2 % 120; // random int in range 0 & 119
-  *y = TMR2 % 20; // random int in range 0 & 19
+  *x = (seed * (counter + snake[3]) * 123) % 120; // random int in range 0 & 119
+  *y = (seed * (counter + snake[0]) * 21) % 20; // random int in range 0 & 19
   // x,y must be be larger than zero if walls are activated
   if(*x == 0){
     (*x) += 1;
@@ -99,6 +100,7 @@ void game_generate_food_regular(void){
       for(i = food[0][0]; i < (food[0][0] + food[0][2]); i++){
         if(gamefield[j][i] != 0){
           collision = 1;
+          seed += 1;
         }
       }
     }
@@ -111,7 +113,7 @@ void game_generate_food_regular(void){
 void game_generate_food_special(void){
   uint8_t const* pattern;
 
-  int type = TMR2 % 6;
+  int type = (seed * (counter + snake[4])) % 6;
   if(type == 0){
     food[1][2] = FOOD_LIZARD_WIDTH;
     food[1][3] = FOOD_LIZARD_HEIGHT;
@@ -157,6 +159,7 @@ void game_generate_food_special(void){
       for(i = food[1][0]; i < (food[1][0] + food[1][2]); i++){
         if(gamefield[j][i] != 0){
           collision = 1;
+          seed += 1;
         }
       }
     }
@@ -167,9 +170,14 @@ void game_generate_food_special(void){
 }
 
 /* Initialize game logic */
-void game_init(void) {    // ändra loopen
+void game_init(void) {
 
-  insert_object(0, 0, 32, 128, game_background, gamefield, 0);
+  // Initialize screen
+  insert_square(0, 0, 25, 128, 0, gamefield);
+  insert_square(0, 25, 7, 128, 1, gamefield);
+  insert_object(0, 25, 7, 23, pattern_score, gamefield, 0);
+  insert_string(98, 26, "MENU", gamefield, 0);
+  insert_object(122, 26, 5, 5, switch_up, gamefield, 0);
 
   // Initialize the snake
   snake[0] = 63;  // head x
@@ -239,8 +247,8 @@ void game_collision(uint8_t x, uint8_t y){
        x < (food[i][0]+food[i][2]) &&
        y >= food[i][1] &&
        y < (food[i][1]+food[i][3])) {
-      insert_square(food[i][0], food[i][1], food[i][3], food[i][2], 0, gamefield);
-      score = score + (food[i][5]*speed);
+      clear_value(food[i][0], food[i][1], food[i][3], food[i][2], 6, gamefield);
+      score = score + (food[i][4]*speed);
       if(i == 0) {
         game_generate_food_regular();
       }
@@ -315,6 +323,9 @@ uint8_t game_collisiondetect(void){
     game_end_init(score);
     gamestate = GAME_END;
   }
+
+  seed = (unsigned)TMR2;
+
   return collision;
 }
 
@@ -572,6 +583,8 @@ void game_move(void){
 
   // Draw score
   insert_num(23, 26, score, gamefield, 0);
+
+  counter = (counter + 1) % 30;
 }
 
 /* Draw game */
