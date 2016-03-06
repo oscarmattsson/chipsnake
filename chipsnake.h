@@ -65,8 +65,8 @@ void settings_init(void);
 void settings_update(int* buttons, int* switches);
 void settings_draw(void);
 
-/* Declare bitmap array containing game background */
-extern const uint8_t const game_background[128*32];
+/* Declare bitmap array containing game score pattern */
+extern const uint8_t const pattern_score[161];
 /* Declare bitmap array containing numbers */
 extern const uint8_t const numbers[11][15];
 /* Declare bitmap array containing small font */
