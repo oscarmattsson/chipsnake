@@ -176,7 +176,7 @@ void game_init(void) {    // ändra loopen
   food[0][2] = FOOD_REGULAR_WIDTH;
   food[0][3] = FOOD_REGULAR_HEIGHT;
   food[0][4] = FOOD_REGULAR_VALUE;
-  game_generate_food_regular();
+  //game_generate_food_regular();
 
   // No special food from the beginning
   for(i = 0; i < 5; i++){
