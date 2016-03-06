@@ -16,7 +16,7 @@
 state gamestate = INTRO;
 state prevgamestate = INTRO;
 uint8_t speed = 6; // no more than 9
-uint8_t walls = 0; 
+uint8_t walls = 0;
 int seed;
 
 uint8_t menufield[32][128];
@@ -53,11 +53,6 @@ void update(void) {
     case GAME:
       if(switches[0])
         gamestate = MENU;
-      if(switches[2]) {
-        seed = (unsigned)TMR2;
-        game_end_init(seed);
-        gamestate = GAME_END;
-      }
       if(prevgamestate != GAME)
         game_draw();
       game_update(buttons, switches);
@@ -77,14 +72,6 @@ void update(void) {
         settings_init();
       settings_update(buttons, switches);
       settings_draw();
-      break;
-    case HELP:
-      if(prevgamestate != HELP)
-        help_init();
-      help_update(buttons, switches);
-      help_draw();
-      break;
-    default:
       break;
   }
   prevgamestate = tempgamestate;
@@ -151,8 +138,9 @@ int main(void) {
 	TRISGCLR = 0x200;
   TRISECLR = 0xFF;
   uint8_t i;
-  for(i = 0; i < speed; i++)
-    PORTESET = 1 << i;
+  for(i = 0; i < speed; i++) {
+    PORTESET = (1 << 7) >> i;
+  }
 
 	/* Set up input pins */
 	TRISFSET = 0x2; // Button 1

@@ -8,12 +8,12 @@
 #define CENTER 128 / 2
 
 /* Declare gamestate variables */
-typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP } state;
+typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS } state;
 extern state gamestate;
 extern state prevgamestate;
 extern uint8_t speed;
 extern int seed;
-extern uint8_t walls; 
+extern uint8_t walls;
 
 /* Declare menu screens array */
 extern uint8_t menufield[32][128];
@@ -55,11 +55,6 @@ void highscore_draw(void);
 void game_end_init(int score);
 void game_end_update(int* buttons, int* switches);
 void game_end_draw(void);
-
-/* Declare functions from help.c */
-void help_init(void);
-void help_update(int* buttons, int* switches);
-void help_draw(void);
 
 /* Declare functions from settings.c */
 void settings_init(void);

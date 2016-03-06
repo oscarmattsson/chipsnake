@@ -10,7 +10,7 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "chipsnake.h"  /* Declatations for game */
 
-#define NUM_MENU_ITEMS 4
+#define NUM_MENU_ITEMS 3
 
 int menuselection = 0;
 int confirmbox = 0;
@@ -40,7 +40,7 @@ void menu_init(void) {
 void menu_update(int* buttons, int* switches) {
   // If previous state is game, default to restart game
   if(prevgamestate == GAME)
-    menuselection = 3;
+    menuselection = 2;
 
   // If previous state is game_end, default to highscore
   if(prevgamestate == GAME_END)
@@ -63,9 +63,7 @@ void menu_update(int* buttons, int* switches) {
         gamestate = HIGHSCORE;    // Go to highscore screen
       else if(menuselection == 1)
         gamestate = SETTINGS;     // Go to settings screen
-      else if(menuselection == 2)
-        gamestate = HELP;         // Go to help screen
-      else if(menuselection == 3) {
+      else if(menuselection == 2) {
         if(confirmbox) {          // Say no to restart game
           confirmbox = 0;
           menu_init();
@@ -97,11 +95,9 @@ void menu_draw(void) {
       case 1: // Draw settings option
         insert_string(CENTER - (sizeof("Settings")*6) / 2, 13, "Settings", menufield, 1);
         break;
-      case 2: // Draw help option
-        insert_string(CENTER - (sizeof("Help")*6) / 2, 13, "Help", menufield, 1);
-        break;
-      case 3: // Draw restart game option
+      case 2: // Draw restart game option
         insert_string(CENTER - (sizeof("Restart Game")*6) / 2, 13, "Restart Game", menufield, 1);
+        break;
     }
   }
 
