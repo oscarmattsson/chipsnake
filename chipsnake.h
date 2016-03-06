@@ -11,6 +11,7 @@
 typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP, TEST } state;
 extern state gamestate;
 extern state prevgamestate;
+extern int speed; 
 
 /* Declare variables for I2C interrupts */
 extern int mifinterrupt;
