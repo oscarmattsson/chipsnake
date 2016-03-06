@@ -15,7 +15,8 @@
 
 state gamestate = INTRO;
 state prevgamestate = INTRO;
-uint8_t speed = 6; // no more than 9 
+uint8_t speed = 6; // no more than 9
+uint8_t walls = 0; 
 int seed;
 
 uint8_t menufield[32][128];

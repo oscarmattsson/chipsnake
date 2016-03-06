@@ -13,6 +13,7 @@ extern state gamestate;
 extern state prevgamestate;
 extern uint8_t speed;
 extern int seed;
+extern uint8_t walls; 
 
 /* Declare menu screens array */
 extern uint8_t menufield[32][128];

@@ -31,12 +31,9 @@ void draw_head(uint8_t x, uint8_t y, uint8_t dir, uint8_t flip) {
     uint8_t yu = y - 1 < GAMEFIELD_TOP ? GAMEFIELD_TOP + GAMEFIELD_HEIGHT - 1 : y - 1;
 
     // Fill head
-    insert_square(x, yu, 1, 1, dir, gamefield);
-    insert_square(xr, yu, 1, 1, dir, gamefield);
-    insert_square(x, y, 1, 1, dir, gamefield);
-    insert_square(xr, y, 1, 1, dir, gamefield);
-    insert_square(x, yd, 1, 1, dir, gamefield);
-    insert_square(xr, yd, 1, 1, dir, gamefield);
+    insert_square(x, yu, 1, 2, dir, gamefield);
+    insert_square(x, y, 1, 2, dir, gamefield);
+    insert_square(x, yd, 1, 2, dir, gamefield);
 
     // Remove odd bit
     if(dir == 2) { // Up
@@ -57,12 +54,9 @@ void draw_head(uint8_t x, uint8_t y, uint8_t dir, uint8_t flip) {
     uint8_t xl = x - 1 < GAMEFIELD_LEFT ? GAMEFIELD_LEFT + GAMEFIELD_WIDTH - 1 : x - 1;
 
     // Fill head
-    insert_square(xl, y, 1, 1, dir, gamefield);
-    insert_square(xl, yd, 1, 1, dir, gamefield);
-    insert_square(x, y, 1, 1, dir, gamefield);
-    insert_square(x, yd, 1, 1, dir, gamefield);
-    insert_square(xr, y, 1, 1, dir, gamefield);
-    insert_square(xr, yd, 1, 1, dir, gamefield);
+    insert_square(xl, y, 2, 1, dir, gamefield);
+    insert_square(x, y, 2, 1, dir, gamefield);
+    insert_square(xr, y, 2, 1, dir, gamefield);
 
     // Remove odd bit
     if(dir == 3) { // Right
@@ -117,7 +111,7 @@ void game_generate_food_regular(void){
 void game_generate_food_special(void){
   uint8_t const* pattern;
 
-  int type = (seed * (counter + snake[4])) % 6;
+  int type = (seed++ * (counter + snake[4]) / 6) % 6;
   if(type == 0){
     food[1][2] = FOOD_LIZARD_WIDTH;
     food[1][3] = FOOD_LIZARD_HEIGHT;
@@ -177,14 +171,17 @@ void game_generate_food_special(void){
 
   // print ut special food
   insert_object(food[1][0], food[1][1], food[1][3], food[1][2], pattern, gamefield, 0);
+  // print out special food icon
+  insert_object(63 - food[1][2], 27, food[1][3], food[1][2], pattern, gamefield, 1);
+
 }
 
 /* Initialize game logic */
 void game_init(void) {
 
   // Initialize screen
-  insert_square(0, 0, 25, 128, 0, gamefield);
-  insert_square(0, 25, 7, 128, 1, gamefield);
+  insert_square(0, 0, 32, 128, 1, gamefield);
+  insert_square(GAMEFIELD_LEFT+walls, GAMEFIELD_TOP+walls, GAMEFIELD_HEIGHT-(2*walls), GAMEFIELD_WIDTH-(2*walls), 0, gamefield);
   insert_object(0, 25, 7, 23, pattern_score, gamefield, 0);
   insert_string(98, 26, "MENU", gamefield, 0);
   insert_object(122, 26, 5, 5, switch_up, gamefield, 0);
@@ -225,6 +222,7 @@ void game_init(void) {
 
   // Draw score
   insert_num(23, 26, score, gamefield, 0);
+
 }
 
 /* Update program logic */
@@ -265,6 +263,8 @@ void game_collision(uint8_t x, uint8_t y){
       }
       if(i == 1){
         special = 0;
+        counter = 30;
+        insert_square(63 - food[1][2], 26, 5, 18, 1, gamefield);
       }
     }
   }
@@ -350,11 +350,12 @@ void game_move(void){
 
   uint8_t x = snake[0];
   uint8_t y = snake[1];
-
+  uint8_t i;
   counter--;
   if(counter == 0){
     if(special){
-      insert_square(food[1][0], snake[1][1], snake[1][3], snake[1][2], 0, gamefield);
+      clear_value(food[1][0], food[1][1], food[1][3], food[1][2], 6, gamefield);
+      insert_square(63 - food[1][2], 26, 5, 18, 1, gamefield);
       for(i = 0; i < 5; i++){
         food[1][i] = 0;
       }
@@ -614,8 +615,10 @@ void game_move(void){
 
   // Draw score
   insert_num(23, 26, score, gamefield, 0);
-
-  counter = (counter + 1) % 30;
+  if(special){
+    insert_square(64, 26, 5, 8, 1, gamefield);
+    insert_num(64, 26, counter, gamefield, 0);
+  }
 }
 
 /* Draw game */

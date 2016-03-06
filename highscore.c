@@ -22,12 +22,12 @@ void highscore_init(void) {
   // Set top and bottom bars
   insert_square(0, 0, 7, 128, 1, menufield);
   insert_square(0, 24, 7, 128, 1, menufield);
-  insert_string(1, 1, "highscore", menufield, 0);
   insert_string(4, 25, "left", menufield, 0);
   insert_string(33, 25, "right", menufield, 0);
   insert_string(100, 25, "back", menufield, 0);
   insert_object(3, 13, 5, 3, button_left, menufield, 1);
   insert_object(124, 13, 5, 3, button_right, menufield, 1);
+  insert_string(1, 1, "highscore", menufield, 0);
 
 }
 
@@ -45,7 +45,7 @@ void highscore_update(int* buttons, int* switches) {
 void highscore_draw(void) {
 
   // Clear index from screen
-  insert_square(105, 1, 5, 30, 1, menufield);
+  insert_square(105, 1, 5, 18, 1, menufield);
 
   // Draw index
   insert_num(119, 1, 10, menufield, 0);
