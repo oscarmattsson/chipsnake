@@ -11,16 +11,8 @@
 typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP } state;
 extern state gamestate;
 extern state prevgamestate;
-<<<<<<< HEAD
-extern int speed; 
-
-/* Declare variables for I2C interrupts */
-extern int mifinterrupt;
-extern int sifinterrupt;
-extern int bifinterrupt;
-=======
 extern uint8_t speed;
->>>>>>> 10e8c34029f990bc8a958b51fc7ad42c03ede57f
+extern int seed;
 
 /* Declare menu screens array */
 extern uint8_t menufield[32][128];
@@ -36,6 +28,7 @@ int insert_char(int x, int y, char c, uint8_t dest[32][128], int reverse);
 int insert_string(int x, int y, const char* s, uint8_t dest[32][128], int reverse);
 int insert_num(int x, int y, int n, uint8_t dest[32][128], int reverse);
 void insert_square(int x, int y, int height, int width, int value, uint8_t dest[32][128]);
+void clear_value(int x, int y, int height, int width, int value, uint8_t dest[32][128]);
 
 /* Declare functions from intro.c */
 void intro_init(void);
