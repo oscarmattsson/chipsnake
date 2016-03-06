@@ -12,6 +12,7 @@ typedef enum { INTRO, MENU, GAME, GAME_END, HIGHSCORE, SETTINGS, HELP } state;
 extern state gamestate;
 extern state prevgamestate;
 extern uint8_t speed;
+extern int seed;
 
 /* Declare menu screens array */
 extern uint8_t menufield[32][128];
@@ -27,6 +28,7 @@ int insert_char(int x, int y, char c, uint8_t dest[32][128], int reverse);
 int insert_string(int x, int y, const char* s, uint8_t dest[32][128], int reverse);
 int insert_num(int x, int y, int n, uint8_t dest[32][128], int reverse);
 void insert_square(int x, int y, int height, int width, int value, uint8_t dest[32][128]);
+void clear_value(int x, int y, int height, int width, int value, uint8_t dest[32][128]);
 
 /* Declare functions from intro.c */
 void intro_init(void);
@@ -63,8 +65,8 @@ void settings_init(void);
 void settings_update(int* buttons, int* switches);
 void settings_draw(void);
 
-/* Declare bitmap array containing game background */
-extern const uint8_t const game_background[128*32];
+/* Declare bitmap array containing game score pattern */
+extern const uint8_t const pattern_score[161];
 /* Declare bitmap array containing numbers */
 extern const uint8_t const numbers[11][15];
 /* Declare bitmap array containing small font */
