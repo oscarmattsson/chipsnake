@@ -1,6 +1,7 @@
 /* basemain.c
 
    This file written 2016 by Oscar Mattsson
+   Modified 2016 by Moa Thorén
    Some original code written 2015 by Axel Isaksson and F Lundevall
 
    For copyright and licensing, see file COPYING */
@@ -14,9 +15,8 @@
 
 state gamestate = INTRO;
 state prevgamestate = INTRO;
-uint8_t speed = 4;
-
-unsigned seed;
+uint8_t speed = 6; // no more than 9 
+int seed;
 
 uint8_t menufield[32][128];
 
@@ -40,8 +40,10 @@ void update(void) {
       intro_draw();
       break;
     case MENU:
-      if(!switches[0])
+      if(!switches[0]) {
         gamestate = GAME;
+        seed = (unsigned)TMR2;
+      }
       if(prevgamestate != MENU)
         menu_init();
       menu_update(buttons, switches);
