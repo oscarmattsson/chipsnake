@@ -29,23 +29,23 @@ void settings_init(void) {
 void settings_update(int* buttons, int* switches) {
   if(prevgamestate == SETTINGS) {
     if(buttons[0]) {
-      if(settingsselected) {    // Exit Settings section
+      if(settingsselected) {          // Exit Settings section
         settingsselected = 0;
-        game_init();
         if(settingsselection == 0) {
-          speed = settingscolumn + 1;
+          speed = settingscolumn + 1; // Update speed value
           int i;
-          PORTECLR = 0xFF;
+          PORTECLR = 0xFF;            // Clear LEDs
           for(i = 0; i < speed; i++) {
-            PORTESET = (1 << 7) >> i;
+            PORTESET = (1 << 7) >> i; // Update speed representation on LEDs
           }
         }
         else if(settingsselection == 1) {
-          walls = settingscolumn;
+          walls = settingscolumn;     // Update walls value
         }
+        game_init();  // Restart game after settings are changed
       }
       else
-        gamestate = MENU;
+        gamestate = MENU;     // Return to menu
     }
     if(buttons[1]) {
       if(!settingsselected)   // Enter Settings section
@@ -135,5 +135,7 @@ void settings_draw(void) {
         break;
     }
   }
+
+  // Draw screen
   display_full_bin(menufield);
 }

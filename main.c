@@ -33,8 +33,11 @@ void update(void) {
   switch(gamestate) {
     case INTRO:
       if(introcount >= INTRO_TIME) {
-        if(switches[0])
+        if(switches[0]) {
           gamestate = MENU;
+          seed = (unsigned)TMR2;
+          game_init();
+        }
         else
           intro_update(buttons, switches);
       }
@@ -105,9 +108,6 @@ void user_isr(void) {
 
 int main(void) {
 
-  /* Initialize seed */
-  seed = (unsigned)TMR2;
-  
 	/* Set up peripheral bus clock */
   /* OSCCONbits.PBDIV = 1; */
   OSCCONCLR = 0x100000; /* clear PBDIV bit 1 */
@@ -180,7 +180,6 @@ int main(void) {
   I2C1CONSET = 0x8000;  // Start I2C bus
 
   /* Program initialization */
-  game_init();
   intro_init();
 
   update();

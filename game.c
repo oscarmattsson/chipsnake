@@ -19,8 +19,8 @@ uint8_t food[2][5];
 uint8_t counter;
 int score;
 
-uint8_t counter = 30;
-uint8_t special = 0;
+uint8_t counter;
+uint8_t special;
 
 void draw_head(uint8_t x, uint8_t y, uint8_t dir, uint8_t flip) {
 
@@ -213,6 +213,8 @@ void game_init(void) {
   game_generate_food_regular();
 
   // No special food from the beginning
+  counter = 30;
+  special = 0;
   for(i = 0; i < 5; i++){
     food[1][i] = 0;
   }
@@ -264,7 +266,7 @@ void game_collision(uint8_t x, uint8_t y){
       if(i == 1){
         special = 0;
         counter = 30;
-        insert_square(63 - food[1][2], 26, 5, 18, 1, gamefield);
+        insert_square(63 - food[1][2], 26, 6, 18, 1, gamefield);
       }
     }
   }
@@ -355,7 +357,7 @@ void game_move(void){
   if(counter == 0){
     if(special){
       clear_value(food[1][0], food[1][1], food[1][3], food[1][2], 6, gamefield);
-      insert_square(63 - food[1][2], 26, 5, 18, 1, gamefield);
+      insert_square(63 - food[1][2], 26, 6, 18, 1, gamefield);
       for(i = 0; i < 5; i++){
         food[1][i] = 0;
       }

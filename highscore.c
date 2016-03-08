@@ -11,10 +11,12 @@
 #include "chipsnake.h"  /* Declatations for game */
 #include "i2c-defs.h" /* Declarations of I2C-specific addresses */
 
-int highscore_offset = 0;
+int highscore_offset;
 
 /* Initialize game logic */
 void highscore_init(void) {
+
+  highscore_offset = 0;
 
   // Clear screen
   insert_square(0, 0, 32, 128, 0, menufield);
@@ -55,7 +57,7 @@ void highscore_draw(void) {
   else
     insert_num(109, 1, highscore_offset + 1, menufield, 0);
 
-  // Draw highscore entry from index
+  // Read selected entry from EEPROM
   char entry[HIGHSCORE_LENGTH + 2];
   entry[HIGHSCORE_LENGTH + 1] = 0; // NUL char
   i2c_start();
@@ -76,6 +78,7 @@ void highscore_draw(void) {
   }
   i2c_stop();
 
+  // Draw selected entry to screen
   insert_string(CENTER - (4*6 + 5*4) / 2, 13, entry, menufield, 1);
 
   // Draw screen
