@@ -101,23 +101,13 @@ void user_isr(void) {
       game_draw();
     }
   }
-
-  /* Handle I2C interrupts */
-  // if(IFS(0) & (1 << 31)) {
-  //   mifinterrupt = 1;
-  //   IFSCLR(0) = 1 << 31;
-  // }
-  // if(IFS(0) & (1 << 30)) {
-  //   sifinterrupt = 1;
-  //   IFSCLR(0) = 1 << 30;
-  // }
-  // if(IFS(0) & (1 << 29)) {
-  //   bifinterrupt = 1;
-  //   IFSCLR(0) = 1 << 29;
-  // }
 }
 
 int main(void) {
+
+  /* Initialize seed */
+  seed = (unsigned)TMR2;
+  
 	/* Set up peripheral bus clock */
   /* OSCCONbits.PBDIV = 1; */
   OSCCONCLR = 0x100000; /* clear PBDIV bit 1 */

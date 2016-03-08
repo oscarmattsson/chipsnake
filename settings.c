@@ -54,7 +54,7 @@ void settings_update(int* buttons, int* switches) {
     if(buttons[2]) {
       if(settingsselected)
         settingscolumn = (settingscolumn + 1) % settingscolumns[settingsselection];
-      // Move to next helpselection
+      // Move to next settingsselection
       else if(!settingsselected) {
         settingsselection = (settingsselection + 1) % NUM_SETTINGS_ITEMS;
         if(settingsselection == 0)
@@ -122,11 +122,8 @@ void settings_draw(void) {
     switch(settingsselection) {
       case 0: // Draw info about speed
         insert_string(1, 1, "SPEED", menufield, 0);
-        if(settingscolumn + 1 < settingscolumns[0]){
-          for(j=0; j < settingscolumn; j++){
-            insert_square(x, y, 4, 3, 1, menufield);
-            x+= 5;
-          }
+        for(j=0; j < settingscolumn + 1; j++){
+          insert_square(x + j*5, y, 4, 3, 1, menufield);
         }
         break;
       case 1: // Draw info about walls

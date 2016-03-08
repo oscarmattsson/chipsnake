@@ -9,9 +9,6 @@
 #include <pic32mx.h>  /* Declarations of system-specific addresses etc */
 #include "chipsnake.h"  /* Declatations for game */
 
-/* Declare a helper function which is local to this file */
-static void num32asc( char * s, int );
-
 #define DISPLAY_CHANGE_TO_COMMAND_MODE (PORTFCLR = 0x10)
 #define DISPLAY_CHANGE_TO_DATA_MODE (PORTFSET = 0x10)
 
