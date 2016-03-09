@@ -1,4 +1,4 @@
-/* basemain.c
+/* main.c
 
    This file written 2016 by Oscar Mattsson
    Modified 2016 by Moa Thorén
@@ -11,11 +11,11 @@
 #include "chipsnake.h"  /* Declatations for game */
 #include "i2c-defs.h"
 
-#define INTRO_TIME 0
+#define INTRO_TIME 3
 
 state gamestate = INTRO;
 state prevgamestate = INTRO;
-uint8_t speed = 6; // no more than 9
+uint8_t speed = 0; // no more than 9
 uint8_t walls = 0;
 int seed;
 
@@ -37,6 +37,11 @@ void update(void) {
           gamestate = MENU;
           seed = (unsigned)TMR2;
           game_init();
+          speed = 6;
+          uint8_t i;
+          for(i = 0; i < speed; i++) {
+            PORTESET = (1 << 7) >> i;
+          }
         }
         else
           intro_update(buttons, switches);
@@ -127,10 +132,6 @@ int main(void) {
 	TRISFCLR = 0x70;
 	TRISGCLR = 0x200;
   TRISECLR = 0xFF;
-  uint8_t i;
-  for(i = 0; i < speed; i++) {
-    PORTESET = (1 << 7) >> i;
-  }
 
 	/* Set up input pins */
 	TRISFSET = 0x2; // Button 1

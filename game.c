@@ -16,7 +16,6 @@ uint8_t gamefield[32][128];
 uint8_t snake[8];
 
 uint8_t food[2][5];
-uint8_t counter;
 int score;
 
 uint8_t counter;

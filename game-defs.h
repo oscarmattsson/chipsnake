@@ -1,3 +1,5 @@
+/* This file written by Oscar Mattsson 2016 */
+
 #define GAMEFIELD_LEFT 0
 #define GAMEFIELD_TOP 0
 #define GAMEFIELD_WIDTH 128

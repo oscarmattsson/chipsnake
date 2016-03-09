@@ -1,7 +1,8 @@
 /* basefunc.c
    This file written 2015 by F Lundevall
    Some parts are original code written by Axel Isaksson
-	 modified 2016 by Oscar Mattsson
+	 Modified 2016 by Oscar Mattsson
+	 Modified 2016 by Moa Thorén
 
    For copyright and licensing, see file COPYING */
 
@@ -225,7 +226,7 @@ int insert_num(int x, int y, int n, uint8_t dest[32][128], int reverse) {
 
 /* Insert a square into a "binary" screen array.
 	 The value inserted in each index of the array
-	 is specified in a parameter */
+	 is specified in a parameter. */
 void insert_square(int x, int y, int height, int width, int value, uint8_t dest[32][128]) {
 	int sy, sx;
 	for(sy = y; sy < y + height; sy++) {
@@ -235,9 +236,8 @@ void insert_square(int x, int y, int height, int width, int value, uint8_t dest[
 	}
 }
 
-/* Insert a square into a "binary" screen array.
-	 The value inserted in each index of the array
-	 is specified in a parameter */
+/* Remove all values matching the parameters inside
+ 	 the given square from a "binary" screen array. */
 void clear_value(int x, int y, int height, int width, int value, uint8_t dest[32][128]) {
 	int sy, sx;
 	for(sy = y; sy < y + height; sy++) {

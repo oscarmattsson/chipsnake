@@ -1,6 +1,6 @@
 /* settings.c
 
-   This file written 2016 by Oscar Mattsson
+   This file written 2016 by Moa Thorén
 
    For copyright and licensing, see file COPYING
 
